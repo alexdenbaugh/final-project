@@ -13,6 +13,6 @@ create table "posts" (
   "gameApiId"      integer        not null,
   "gameThumbNail"  text           not null,
   "lenderComments" text           not null,
-  "createdAt"      timesstampz(6) not null default now()
+  "createdAt"      timestamptz(6) not null default now(),
   primary key ("postId")
 );
