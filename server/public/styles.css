@@ -29,34 +29,53 @@ header {
   cursor: pointer;
 }
 
-.bookmark {
-  height: 0;
-  width: 0;
-  border-top: 30px solid #233d4d;
-  border-right: 30px solid transparent;
-  border-bottom: 30px solid #233d4d;
-  border-left: 150px solid #233d4d;
-  border-radius: 10px 0 0 10px;
-
-  /* background-color: #233d4d;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-radius: 10px 0 0 10px; */
-  box-shadow: black -5px 5px 10px 0;
+.shadow {
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.25),
+    0 2px 2px rgba(0, 0, 0, 0.2),
+    0 4px 4px rgba(0, 0, 0, 0.15),
+    0 8px 8px rgba(0, 0, 0, 0.1),
+    0 16px 16px rgba(0, 0, 0, 0.05);
 }
 
-/* .tab {
-  background-color: #d6e4c8;
-  height: 0;
-  width: 0;
-  border-top: 30px solid #d6e4c8;
-  border-right: 30px solid transparent;
-  border-bottom: 30px solid #d6e4c8;
-  border-left: 60px solid #d6e4c8;
-  border-radius: 10px 0 0 10px;
-} */
+.bookmark {
+  background-color: #233d4d;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  border-radius: 0 10px 10px 0;
+  position: relative;
+  left: -10px;
+}
 
-h1 {
+h2 {
   margin: 10px;
+}
+
+img {
+  width: 100%;
+  border-radius: 20px;
+  border: #233d4d 5px solid;
+}
+
+.input {
+  width: 100%;
+}
+
+input,
+textarea {
+  font-size: 15px;
+  width: 100%;
+  padding: 5px;
+  background-color: #e5e5e5;
+  border: #233d4d 3px solid;
+  border-radius: 10px;
+}
+
+input {
+  height: 40px;
+}
+
+.form-element {
+  margin: 30px 0;
 }

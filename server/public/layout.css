@@ -1,16 +1,14 @@
 .container {
-  /* background-color: #e5e5e5; */
-  margin: 0 auto;
-  width: 800px;
+  padding: 10px;
 }
 
 .row {
   width: 100%;
-  margin: 10px 0;
 }
 
 .col-2 {
-  width: 50%;
+  width: 100%;
+  margin: 20px 0;
 }
 
 .col-1 {
@@ -18,11 +16,26 @@
 }
 
 .col-4 {
-  width: 25%;
+  width: fit-content;
 }
 
-/* @media screen and (min-width: 768px) {
+label {
+  margin: 10px;
+  font-weight: 600;
+}
+
+.label {
+  width: 50%;
+  margin-bottom: 10px;
+}
+
+@media screen and (min-width: 768px) {
   .container {
+    margin: 0 auto;
     max-width: 800px;
   }
-} */
+
+  .col-4 {
+    width: 25%;
+  }
+}

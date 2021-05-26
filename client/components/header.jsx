@@ -4,7 +4,7 @@ export default class Header extends React.Component {
   render() {
     return (
       <>
-        <header>
+        <header className="shadow">
           <div className="header-icon">
             <i className="fab fa-phoenix-framework"></i>
           </div>
