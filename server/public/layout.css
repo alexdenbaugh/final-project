@@ -1,0 +1,28 @@
+.container {
+  /* background-color: #e5e5e5; */
+  margin: 0 auto;
+  width: 800px;
+}
+
+.row {
+  width: 100%;
+  margin: 10px 0;
+}
+
+.col-2 {
+  width: 50%;
+}
+
+.col-1 {
+  width: 100%;
+}
+
+.col-4 {
+  width: 25%;
+}
+
+/* @media screen and (min-width: 768px) {
+  .container {
+    max-width: 800px;
+  }
+} */
