@@ -2,6 +2,10 @@
   padding: 10px;
 }
 
+.search {
+  background-color: #292929;
+}
+
 .row {
   width: 100%;
 }
@@ -22,6 +26,7 @@
 label {
   margin: 10px;
   font-weight: 600;
+  font-size: 20px;
 }
 
 .label {

@@ -5,8 +5,8 @@ export default class NewPostForm extends React.Component {
     return (
       <form action="#">
         <div className="row">
-          <div className="col-4 bookmark shadow">
-            <h2 className="orange">New Post</h2>
+          <div className="col-4 bookmark title shadow">
+            <h1 className="orange">New Post</h1>
           </div>
         </div>
         <div className="row">
@@ -19,7 +19,7 @@ export default class NewPostForm extends React.Component {
                 <label className="orange" htmlFor="new-game-search">Name of Game:</label>
               </div>
               <div className="input">
-                <input type="text" className="lora shadow" id="new-game-search" placeholder="Search for a game..."/>
+                <input required type="text" className="lora shadow" id="new-game-search" placeholder="Search for a game..."/>
               </div>
             </div>
             <div className="form-element">
@@ -27,7 +27,7 @@ export default class NewPostForm extends React.Component {
                 <label className="orange" htmlFor="new-game-name">Your Name:</label>
               </div>
               <div className="input">
-                <input type="text" className="lora shadow" id="new-game-name" />
+                <input required type="text" className="lora shadow" id="new-game-name" />
               </div>
             </div>
           </div>
@@ -38,11 +38,13 @@ export default class NewPostForm extends React.Component {
               <label className="orange" htmlFor="new-game-comments">Comments:</label>
             </div>
             <div className="input">
-              <textarea className="shadow" name="new-game-comments" id="new-game-comments" cols="30" rows="8"></textarea>
+              <textarea required className="shadow" name="new-game-comments" id="new-game-comments" cols="30" rows="8"></textarea>
             </div>
           </div>
         </div>
-        <div className="row"></div>
+        <div className="row form-button">
+          <button className="form-button shadow">Post</button>
+        </div>
       </form>
     );
   }

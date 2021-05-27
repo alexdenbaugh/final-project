@@ -3,6 +3,7 @@ import Home from './pages/home';
 import Header from './components/header';
 import PageContainer from './components/page-container';
 import NewPostForm from './components/new-post';
+import GameSearch from './components/game-search';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -17,6 +18,7 @@ export default class App extends React.Component {
       <>
         <Home />
         <NewPostForm />
+        <GameSearch />
       </>
     );
   }
@@ -25,9 +27,11 @@ export default class App extends React.Component {
     return (
       <>
         <Header />
-        <PageContainer>
-          { this.renderPage() }
-        </PageContainer>
+        <main className="">
+          <PageContainer>
+            { this.renderPage() }
+          </PageContainer>
+        </main>
       </>
     );
   }
