@@ -107,10 +107,28 @@ button:hover {
   border: #fd910d 3px solid;
 }
 
+.game-search {
+  position: relative;
+}
+
 .form-element {
   margin: 30px 0;
 }
 
 div.form-button {
   text-align: end;
+}
+
+.modal-container {
+  background-color: #292929;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0 10px 10px;
+}
+
+.hidden {
+  display: none;
 }
