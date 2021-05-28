@@ -4,23 +4,25 @@ export default class NewPostForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      searching: false
+      searchView: false,
+      loading: false,
+      searchButton: false
     };
     this.handleClick = this.handleClick.bind(this);
   }
 
-  handleSearch(event) {
-    // console.log(event.target.value);
-
-  }
+  // handleSearch(event) {
+  //   console.log(event.target.value);
+  //   // let url = 'http://www.boardgamegeek.com/xmlapi/search'
+  // }
 
   handleClick() {
-    this.setState({ searching: true });
+    // this.setState({ searchView: true });
   }
 
   renderForm() {
     let hidden;
-    if (this.state.searching) {
+    if (this.state.searchView) {
       hidden = '';
     } else {
       hidden = 'hidden';
@@ -41,8 +43,11 @@ export default class NewPostForm extends React.Component {
               <div className="label bookmark shadow">
                 <label className="orange" htmlFor="new-game-search">Name of Game:</label>
               </div>
-              <div className="input">
-                <input onClick={this.handleClick} required type="text" className="lora shadow" id="new-game-search" placeholder="Search for a game..." />
+              <div className="search-input shadow">
+                <div className="search-icon">
+                  <label htmlFor="new-game-search"><i className="orange fas fa-search"></i></label>
+                </div>
+                <input onClick={this.handleClick} required type="text" className="lora" id="new-game-search" placeholder="Search for a game..." />
               </div>
             </div>
             <div className="form-element">
@@ -70,10 +75,11 @@ export default class NewPostForm extends React.Component {
         </div>
         <div className={`modal-container ${hidden}`}>
           <div className="row">
-            <div className="col-2">
-              <div className="input">
-                <input onKeyUp={this.handleSearch} required type="text" className="lora shadow" id="new-game-search" placeholder="Search for a game..." />
+            <div className="search-input shadow">
+              <div className="search-icon">
+                <label htmlFor="new-game-search"><i className="orange fas fa-search"></i></label>
               </div>
+              <input onClick={this.handleClick} required type="text" className="lora" id="new-game-search" placeholder="Search for a game..." />
             </div>
           </div>
           <div className="row">

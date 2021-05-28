@@ -6,7 +6,7 @@ export default class Header extends React.Component {
       <>
         <header className="shadow">
           <div className="header-icon">
-            <i className="fab fa-phoenix-framework"></i>
+            <a href="#"><i className="fab fa-phoenix-framework"></i></a>
           </div>
         </header>
       </>
