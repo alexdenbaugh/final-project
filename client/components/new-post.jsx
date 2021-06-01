@@ -35,15 +35,14 @@ export default class NewPostForm extends React.Component {
 
   handleType(event) {
     this.setState({ gameSearch: event.target.value });
-    // console.log(this.runSearch)
     this.runSearch();
   }
 
   runSearch() {
     // console.log(this.state.gameSearch)
-    // fetch(`/api/boardGames/${game}`)
-    //   .then(response => JSON.parse(response))
-    //   .then(games => console.log(games))
+    fetch(`/api/boardGames/${this.state.gameSearch}`)
+      .then(response => response.json());
+    // .then(games => console.log(games))
   }
 
   renderForm() {
