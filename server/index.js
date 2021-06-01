@@ -4,6 +4,8 @@ const errorMiddleware = require('./error-middleware');
 const staticMiddleware = require('./static-middleware');
 const ClientError = require('./client-error');
 const pg = require('pg');
+const fetch = require('node-fetch');
+// const parseXml2JS = require('xml2js').parseString
 
 const app = express();
 
@@ -32,6 +34,22 @@ app.post('/boardGamePosts', (req, res, next) => {
     .then(result => {
       const [post] = result.rows;
       res.status(201).send(post);
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/boardGames/:game', (req, res, next) => {
+  const game = req.params.game;
+  // console.log(game)
+  // let header = new Headers();
+  const init = {
+    mode: 'no-cors'
+  };
+  fetch(`http://www.boardgamegeek.com/xmlapi/search?search=${game}`, init)
+    .then(response => response.text())
+    .then(xml => {
+      // console.log('result:', xml)
+      res.status(200).send('I hear you');
     })
     .catch(err => next(err));
 });

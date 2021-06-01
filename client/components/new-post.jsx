@@ -5,28 +5,54 @@ export default class NewPostForm extends React.Component {
     super(props);
     this.state = {
       searchView: false,
-      loading: false,
-      searchButton: false
+      searchStatus: 'initial'
     };
     this.handleClick = this.handleClick.bind(this);
+    this.searchStage = this.searchStage.bind(this);
   }
 
-  // handleSearch(event) {
-  //   console.log(event.target.value);
-  //   // let url = 'http://www.boardgamegeek.com/xmlapi/search'
-  // }
+  handleSearch(event) {
+    event.preventDefault();
+    // console.log(event.target.game.value);
+    // let game = event.target.game.value;
+    // game = game.split(' ')
+    // game = game.join('%20')
+    // console.log(game)
+
+    // let header = new Headers();
+    // const init = {
+    //   mode: 'no-cors'
+    // }
+
+  }
 
   handleClick() {
-    // this.setState({ searchView: true });
+    this.setState({ searchView: true });
+  }
+
+  searchStage() {
+    if (this.state.searchStatus === 'initial') {
+      return (
+        <div className="row form-button">
+          <button className="form-button shadow">Search</button>
+        </div>
+      );
+    } else if (this.state.searchStatus === 'searching') {
+      return (
+        <div className="row">
+          <h3 className="orange">Searching...</h3>
+        </div>
+      );
+    } else if (this.state.searchStatus === 'results') {
+      return (
+        <div className="row">
+          {/* { SearchList(this.state.searchItems) } */}
+        </div>
+      );
+    }
   }
 
   renderForm() {
-    let hidden;
-    if (this.state.searchView) {
-      hidden = '';
-    } else {
-      hidden = 'hidden';
-    }
     return (
       <>
         <div className="row">
@@ -73,28 +99,36 @@ export default class NewPostForm extends React.Component {
         <div className="row form-button">
           <button className="form-button shadow">Post</button>
         </div>
-        <div className={`modal-container ${hidden}`}>
-          <div className="row">
-            <div className="search-input shadow">
-              <div className="search-icon">
-                <label htmlFor="new-game-search"><i className="orange fas fa-search"></i></label>
-              </div>
-              <input onClick={this.handleClick} required type="text" className="lora" id="new-game-search" placeholder="Search for a game..." />
-            </div>
-          </div>
-          <div className="row">
-            {/* { SearchList(this.state.searchItems) } */}
-          </div>
-        </div>
       </>
     );
   }
 
   render() {
+    let hidden;
+    if (this.state.searchView) {
+      hidden = '';
+    } else {
+      hidden = 'hidden';
+    }
     return (
-      <form action="#" className="game-search" autoComplete="off">
-        { this.renderForm() }
-      </form>
+      <>
+        <form action="#" className="game-search" autoComplete="off">
+          {this.renderForm()}
+        </form>
+        <form onSubmit={this.handleSearch} className={`modal-container ${hidden}`}>
+          <div className="row">
+            <div className="search-input shadow">
+              <div className="search-icon">
+                <label htmlFor="new-game-search-modal"><i className="orange fas fa-search"></i></label>
+              </div>
+              <input required type="text" className="lora" id="new-game-search-modal" name='game' placeholder="Search for a game..." />
+            </div>
+          </div>
+          <>
+            {this.searchStage()}
+          </>
+        </form>
+      </>
     );
   }
 }
