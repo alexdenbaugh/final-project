@@ -5,7 +5,7 @@ const staticMiddleware = require('./static-middleware');
 const ClientError = require('./client-error');
 const pg = require('pg');
 const fetch = require('node-fetch');
-// const parseXml2JS = require('xml2js').parseString
+const xml2js = require('xml2js');
 
 const app = express();
 
@@ -48,8 +48,38 @@ app.get('/api/boardGames/:game', (req, res, next) => {
   fetch(`http://www.boardgamegeek.com/xmlapi/search?search=${game}`, init)
     .then(response => response.text())
     .then(xml => {
-      // console.log('result:', xml)
-      res.status(200).send('I hear you');
+      const parser = new xml2js.Parser();
+      parser.parseStringPromise(xml)
+        .then(result => {
+          // console.log(JSON.stringify(result))
+          const json = JSON.stringify(result);
+          const games = JSON.parse(json);
+          const gameIds = games.boardgames.boardgame
+            .map(game => {
+              return game.$.objectid;
+            });
+          // console.log(gameIds)
+          return gameIds;
+        })
+        .then(gameIds => {
+          fetch(`http://www.boardgamegeek.com/xmlapi/boardgame/${gameIds.join(',')}`, init)
+            .then(response => response.text())
+            .then(xmlGames => {
+              const parserGames = new xml2js.Parser();
+              parserGames.parseStringPromise(xmlGames)
+                .then(resultGames => {
+                  // console.log(resultGames.boardgames.boardgame[0].thumbnail[0])
+                  const data = resultGames.boardgames.boardgame.map(g => {
+                    return g.thumbnail[0] ? g.thumbnail[0] : '';
+                  });
+                  res.status(200).send(data);
+
+                });
+            });
+          // console.log('here are the games:', gameIds)
+
+        })
+        .catch(err => next(err));
     })
     .catch(err => next(err));
 });
