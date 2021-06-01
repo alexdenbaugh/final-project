@@ -1,14 +1,17 @@
 import React from 'react';
+import debounce from '../lib/debounce';
 
 export default class NewPostForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       searchView: false,
-      searchStatus: 'initial'
+      gameList: [],
+      gameSearch: ''
     };
     this.handleClick = this.handleClick.bind(this);
-    this.searchStage = this.searchStage.bind(this);
+    this.runSearch = debounce(this.runSearch.bind(this), 500);
+    this.handleType = this.handleType.bind(this);
   }
 
   handleSearch(event) {
@@ -17,7 +20,7 @@ export default class NewPostForm extends React.Component {
     // let game = event.target.game.value;
     // game = game.split(' ')
     // game = game.join('%20')
-    // console.log(game)
+    // // console.log(game)
 
     // let header = new Headers();
     // const init = {
@@ -30,26 +33,17 @@ export default class NewPostForm extends React.Component {
     this.setState({ searchView: true });
   }
 
-  searchStage() {
-    if (this.state.searchStatus === 'initial') {
-      return (
-        <div className="row form-button">
-          <button className="form-button shadow">Search</button>
-        </div>
-      );
-    } else if (this.state.searchStatus === 'searching') {
-      return (
-        <div className="row">
-          <h3 className="orange">Searching...</h3>
-        </div>
-      );
-    } else if (this.state.searchStatus === 'results') {
-      return (
-        <div className="row">
-          {/* { SearchList(this.state.searchItems) } */}
-        </div>
-      );
-    }
+  handleType(event) {
+    this.setState({ gameSearch: event.target.value });
+    // console.log(this.runSearch)
+    this.runSearch();
+  }
+
+  runSearch() {
+    // console.log(this.state.gameSearch)
+    // fetch(`/api/boardGames/${game}`)
+    //   .then(response => JSON.parse(response))
+    //   .then(games => console.log(games))
   }
 
   renderForm() {
@@ -121,12 +115,9 @@ export default class NewPostForm extends React.Component {
               <div className="search-icon">
                 <label htmlFor="new-game-search-modal"><i className="orange fas fa-search"></i></label>
               </div>
-              <input required type="text" className="lora" id="new-game-search-modal" name='game' placeholder="Search for a game..." />
+              <input onKeyUp={this.handleType} required type="text" className="lora" id="new-game-search-modal" name='game' placeholder="Search for a game..." />
             </div>
           </div>
-          <>
-            {this.searchStage()}
-          </>
         </form>
       </>
     );
