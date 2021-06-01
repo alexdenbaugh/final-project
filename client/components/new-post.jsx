@@ -115,7 +115,7 @@ export default class NewPostForm extends React.Component {
         <form action="#" className="game-search" autoComplete="off">
           {this.renderForm()}
         </form>
-        <form onSubmit={this.handleSearch} className={`modal-container ${hidden}`}>
+        <form onSubmit={this.handleSearch} className={`modal-container ${hidden}`} autoComplete="off">
           <div className="row">
             <div className="search-input shadow">
               <div className="search-icon">

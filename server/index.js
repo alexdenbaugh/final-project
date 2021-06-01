@@ -39,13 +39,13 @@ app.post('/boardGamePosts', (req, res, next) => {
 });
 
 app.get('/api/boardGames/:game', (req, res, next) => {
-  const game = req.params.game;
-  // console.log(game)
-  // let header = new Headers();
+  if (!req.params.game) {
+    throw new ClientError(400, 'game is a required field');
+  }
   const init = {
     mode: 'no-cors'
   };
-  fetch(`http://www.boardgamegeek.com/xmlapi/search?search=${game}`, init)
+  fetch(`http://www.boardgamegeek.com/xmlapi/search?search=${req.params.game}`, init)
     .then(response => response.text())
     .then(xml => {
       const parser = new xml2js.Parser();
@@ -54,35 +54,68 @@ app.get('/api/boardGames/:game', (req, res, next) => {
           // console.log(JSON.stringify(result))
           const json = JSON.stringify(result);
           const games = JSON.parse(json);
-          const gameIds = games.boardgames.boardgame
-            .map(game => {
-              return game.$.objectid;
-            });
-          // console.log(gameIds)
-          return gameIds;
-        })
-        .then(gameIds => {
-          fetch(`http://www.boardgamegeek.com/xmlapi/boardgame/${gameIds.join(',')}`, init)
-            .then(response => response.text())
-            .then(xmlGames => {
-              const parserGames = new xml2js.Parser();
-              parserGames.parseStringPromise(xmlGames)
-                .then(resultGames => {
-                  // console.log(resultGames.boardgames.boardgame[0].thumbnail[0])
-                  const data = resultGames.boardgames.boardgame.map(g => {
-                    return g.thumbnail[0] ? g.thumbnail[0] : '';
-                  });
-                  res.status(200).send(data);
-
-                });
-            });
-          // console.log('here are the games:', gameIds)
+          if (!games.boardgames.boardgame) {
+            throw new ClientError(404, 'game not found');
+          }
+          let gameInfo = games.boardgames.boardgame.reduce((list, listItem) => {
+            let {
+              $: {
+                objectid: gameId
+              },
+              name: [
+                {
+                  _: name
+                }
+              ]
+            } = listItem;
+            if (name) {
+              name = name.toLocaleLowerCase('en-US');
+              if (name.startsWith(req.params.game.split('%20').join(' '))) {
+                list.push({ name, gameId });
+              }
+            }
+            return list;
+          }, []);
+          if (gameInfo.length > 10) {
+            gameInfo = gameInfo.slice(0, 10);
+          }
+          res.status(200).send(gameInfo);
 
         })
         .catch(err => next(err));
     })
     .catch(err => next(err));
 });
+
+// app.get('/api/boardGameInfo/:gameId', (req, res, next) => {
+//   let gameId = parseInt(req.params.gameId, 10);
+//   if (!req.params.gameId) {
+//     throw new ClientError(400, 'gameId is a required field.')
+//   } else if (!Number.isInteger(gameId) || gameId <= 0) {
+//     throw new ClientError(400, 'gameId must be a positive integer.')
+//   }
+//   console.log(gameId);
+//   const init = {
+//     mode: 'no-cors'
+//   };
+//   fetch(`http://www.boardgamegeek.com/xmlapi/boardgame/${gameId}`, init)
+//     .then(response => response.text())
+//     .then(xml => {
+//       const parser = new xml2js.Parser();
+//       parser.parseStringPromise(xml)
+//         .then(game => {
+//           console.log(game.boardgames.boardgame[0].thumbnail[0])
+//           // const data = resultGames.boardgames.boardgame.map(g => {
+//           //   return g.thumbnail[0] ? g.thumbnail[0] : '';
+//           // });
+//           let gameInfo = game.boardgames.boardgame
+
+//           res.status(200).send(game.boardgames.boardgame);
+//         })
+//         .catch(err => next(err));
+//     })
+//     .catch(err => next(err));
+// })
 
 app.use(staticMiddleware);
 app.use(errorMiddleware);
