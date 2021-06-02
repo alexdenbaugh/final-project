@@ -99,9 +99,6 @@ export default class NewPostForm extends React.Component {
     fetch('/api/boardGamePosts', init)
       .then(response => response.json())
       .then(post => {
-        // event.target.elements.name.value = '';
-        // event.target.elements.game.value = '';
-        // event.target.elements.comments.value = '';
         this.setState({
           chosenGame: null,
           formNameValue: '',
