@@ -5,11 +5,6 @@ import NewPostForm from './components/new-post';
 import AppContext from './lib/app-context';
 
 export default class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-    };
-  }
 
   renderPage() {
     return (

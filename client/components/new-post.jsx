@@ -9,9 +9,13 @@ export default class NewPostForm extends React.Component {
       gameList: [],
       gameSearch: '',
       searchStatus: 'empty',
-      chosenGame: null
+      chosenGame: null,
+      formNameValue: '',
+      formGameValue: '',
+      formCommentsValue: ''
     };
     this.handleSearch = this.handleSearch.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.runSearch = debounce(this.runSearch.bind(this), 500);
     this.handleType = this.handleType.bind(this);
@@ -29,13 +33,26 @@ export default class NewPostForm extends React.Component {
         this.setState({ chosenGame: gameInfo, searchStatus: 'empty', modalView: 'none' });
       })
       .then(() => {
-        this.setState({ searchStatus: 'chosen' });
+        this.setState({ searchStatus: 'chosen', formGameValue: chosenGame.name });
       });
   }
 
   handleClick() {
     this.setState({ modalView: 'search' });
     this.runSearch();
+  }
+
+  handleChange(event) {
+    const { name, value } = event.target;
+    if (name === 'name') {
+      this.setState({
+        formNameValue: value
+      });
+    } else if (name === 'comments') {
+      this.setState({
+        formCommentsValue: value
+      });
+    }
   }
 
   handleType(event) {
@@ -82,10 +99,15 @@ export default class NewPostForm extends React.Component {
     fetch('/api/boardGamePosts', init)
       .then(response => response.json())
       .then(post => {
-        event.target.elements.name.value = '';
-        event.target.elements.game.value = '';
-        event.target.elements.comments.value = '';
-        this.setState({ chosenGame: null });
+        // event.target.elements.name.value = '';
+        // event.target.elements.game.value = '';
+        // event.target.elements.comments.value = '';
+        this.setState({
+          chosenGame: null,
+          formNameValue: '',
+          formGameValue: '',
+          formCommentsValue: ''
+        });
       });
   }
 
@@ -120,7 +142,7 @@ export default class NewPostForm extends React.Component {
                   <label className="orange" htmlFor="new-game-name">Your Name:</label>
                 </div>
                 <div className="input">
-                  <input required type="text" className="lora shadow" name="name" id="new-game-name" />
+                  <input required type="text" onChange={this.handleChange} value={this.state.formNameValue} className="lora shadow" name="name" id="new-game-name" />
                 </div>
               </div>
             </div>
@@ -131,7 +153,7 @@ export default class NewPostForm extends React.Component {
                 <label className="orange" htmlFor="new-game-comments">Comments:</label>
               </div>
               <div className="input col-1">
-                <textarea required className="lora shadow" name="comments" id="new-game-comments" cols="30" rows="8"></textarea>
+                <textarea onChange={this.handleChange} value={this.state.formCommentsValue} required className="lora shadow" name="comments" id="new-game-comments" cols="30" rows="8"></textarea>
               </div>
             </div>
           </div>
@@ -158,7 +180,7 @@ export default class NewPostForm extends React.Component {
                   <div className="search-icon">
                     <label htmlFor="new-game-search"><i className="orange fas fa-search"></i></label>
                   </div>
-                  <input onClick={this.handleClick} readOnly required type="text" className="lora" id="new-game-search" value="" placeholder="Search for a game..." />
+                  <input onClick={this.handleClick} readOnly required type="text" className="lora" id="new-game-search" value={this.state.formGameValue} placeholder="Search for a game..." />
                 </div>
               </div>
               <div className="form-element">
@@ -166,7 +188,7 @@ export default class NewPostForm extends React.Component {
                   <label className="orange" htmlFor="new-game-name">Your Name:</label>
                 </div>
                 <div className="input">
-                  <input required type="text" className="lora shadow" id="new-game-name" />
+                  <input onChange={this.handleChange} required type="text" className="lora shadow" value={this.state.formNameValue} id="new-game-name" />
                 </div>
               </div>
             </div>
@@ -177,7 +199,7 @@ export default class NewPostForm extends React.Component {
                 <label className="orange" htmlFor="new-game-comments">Comments:</label>
               </div>
               <div className="input col-1">
-                <textarea required className="lora shadow" name="new-game-comments" id="new-game-comments" cols="30" rows="8"></textarea>
+                <textarea onChange={this.handleChange} required className="lora shadow" name="new-game-comments" value={this.state.formCommentsValue} id="new-game-comments" cols="30" rows="8"></textarea>
               </div>
             </div>
           </div>
