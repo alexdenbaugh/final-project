@@ -1,0 +1,184 @@
+* {
+  font-family: 'Ubuntu', sans-serif;
+}
+
+.lora {
+  font-family: 'Lora', serif;
+}
+
+.orange {
+  color: #fd910d;
+}
+
+header {
+  width: 100%;
+  height: 50px;
+  background-color: #233d4d;
+  display: flex;
+  align-items: center;
+}
+
+main {
+  width: 100%;
+  height: 100%;
+  background-color: #d6e4c8;
+}
+
+.header-icon i {
+  color: #fd910d;
+  font-size: 40px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.search-icon i {
+  font-size: 25px;
+  color: #fd910d;
+}
+
+.shadow {
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.25),
+    0 2px 2px rgba(0, 0, 0, 0.2),
+    0 4px 4px rgba(0, 0, 0, 0.15),
+    0 8px 8px rgba(0, 0, 0, 0.1),
+    0 16px 16px rgba(0, 0, 0, 0.05);
+}
+
+.bookmark {
+  background-color: #233d4d;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  border-radius: 10px;
+  left: -10px;
+}
+
+h1 {
+  margin: 10px 40px 10px 10px;
+}
+
+.title {
+  margin: 20px 0;
+  width: fit-content;
+}
+
+.image-post {
+  display: flex;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+}
+
+img {
+  max-width: 100%;
+  border-radius: 20px;
+  object-fit: scale-down;
+  border: #233d4d 5px solid;
+  background-color: #e5e5e5;
+}
+
+.input {
+  width: 100%;
+}
+
+.search-input {
+  display: flex;
+  align-items: center;
+  background-color: #233d4d;
+  border-radius: 10px;
+}
+
+textarea {
+  resize: none;
+}
+
+input,
+textarea {
+  font-size: 18px;
+  width: 100%;
+  padding: 5px;
+  background-color: #e5e5e5;
+  border: #233d4d 3px solid;
+  border-radius: 10px;
+}
+
+input {
+  height: 40px;
+}
+
+input,
+textarea,
+button,
+label,
+a {
+  outline: #fd910d;
+  cursor: pointer;
+}
+
+button {
+  font-size: 20px;
+  background-color: #233d4d;
+  color: #fd910d;
+  padding: 10px 40px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+input:hover,
+textarea:hover,
+button:hover {
+  border: #fd910d 3px solid;
+}
+
+.game-search {
+  position: relative;
+}
+
+div.form-button {
+  text-align: end;
+}
+
+.modal-container {
+  background-color: #292929;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 10px 10px 10px;
+}
+
+.search-message {
+  text-align: center;
+}
+
+.search-list {
+  background-color: #e5e5e5;
+  display: flex;
+  flex-wrap: wrap;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  padding: 5px;
+  border-radius: 10px;
+  border: #233d4d 3px solid;
+}
+
+.search-item {
+  color: #fd910d;
+  background-color: #233d4d;
+  width: 100%;
+  margin: 5px;
+  padding: 10px;
+  border: #233d4d 3px solid;
+  border-radius: 10px;
+}
+
+.search-item > h3 {
+  margin: 0;
+}
+
+.hidden {
+  display: none;
+}
