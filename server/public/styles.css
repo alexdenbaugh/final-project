@@ -50,28 +50,22 @@ main {
   display: flex;
   align-items: center;
   text-align: center;
-  border-radius: 0 10px 10px 0;
-  position: relative;
+  border-radius: 10px;
   left: -10px;
 }
 
 h1 {
-  margin: 10px;
+  margin: 10px 40px 10px 10px;
 }
 
 .title {
-  margin-top: 20px;
-  width: 60%;
+  margin: 20px 0;
+  width: fit-content;
 }
 
 .image-post {
-  /* background-color: #e5e5e5; */
   display: flex;
   justify-content: center;
-
-  /* border-radius: 20px;
-  border: #233d4d 5px solid; */
-  width: 100%;
   aspect-ratio: 1 / 1;
 }
 
@@ -92,6 +86,10 @@ img {
   align-items: center;
   background-color: #233d4d;
   border-radius: 10px;
+}
+
+textarea {
+  resize: none;
 }
 
 input,
@@ -135,10 +133,6 @@ button:hover {
 
 .game-search {
   position: relative;
-}
-
-.form-element {
-  margin: 30px 0;
 }
 
 div.form-button {
