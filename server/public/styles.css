@@ -6,6 +6,10 @@
   font-family: 'Lora', serif;
 }
 
+.bg-dark-grey {
+  background-color: #292929;
+}
+
 .orange {
   color: #fd910d;
 }
@@ -227,8 +231,9 @@ div.form-button {
 }
 
 .post-item-info h3 {
-  border-radius: 3px;
+  border-radius: 5px;
   margin: 0;
+  padding: 3px;
 }
 
 .post-item-info-title {

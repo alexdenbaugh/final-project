@@ -1,5 +1,7 @@
 .container {
   padding: 10px;
+  position: relative;
+  min-height: 100vh;
 }
 
 .search {

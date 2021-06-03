@@ -9,17 +9,23 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      view: 'posts'
+      view: 'posts',
+      bgColor: ''
     };
     this.handleHeader = this.handleHeader.bind(this);
+    this.backGroundColor = this.backGroundColor.bind(this);
   }
 
   handleHeader(event) {
     if (event.target.dataset.view === 'new-post-icon') {
-      this.setState({ view: 'new' });
+      this.setState({ view: 'new', bgColor: '' });
     } else if (event.target.dataset.view === 'search-post-icon') {
       this.setState({ view: 'posts' });
     }
+  }
+
+  backGroundColor(props) {
+    this.setState({ bgColor: props.bgColor });
   }
 
   renderPage() {
@@ -40,12 +46,15 @@ export default class App extends React.Component {
   }
 
   render() {
-    const contextValue = {};
+    const { bgColor } = this.state;
+    const backGroundColor = this.backGroundColor;
+
+    const contextValue = { bgColor, backGroundColor };
     return (
       <>
         <Header handleHeader={this.handleHeader} />
         <AppContext.Provider value={ contextValue }>
-          <main>
+          <main className={this.state.bgColor}>
             <PageContainer>
               { this.renderPage() }
             </PageContainer>
