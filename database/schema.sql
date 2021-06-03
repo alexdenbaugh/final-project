@@ -10,9 +10,17 @@ create table "posts" (
   "postId"         serial,
   "lenderName"     text           not null,
   "gameName"       text           not null,
-  "gameApiId"      integer        not null,
+  "gameId"         integer        not null,
   "gameThumbNail"  text           not null,
+  "gameImage"      text           not null,
   "lenderComments" text           not null,
+  "description"    text           not null,
+  "minPlayers"     integer        not null,
+  "maxPlayers"     integer        not null,
+  "minPlayTime"    integer        not null,
+  "maxPlayTime"    integer        not null,
+  "ageRange"       text           not null,
+  "yearPublished"  integer        not null,
   "createdAt"      timestamptz(6) not null default now(),
   primary key ("postId")
 );
