@@ -15,7 +15,9 @@ header {
   height: 50px;
   background-color: #233d4d;
   display: flex;
+  justify-content: space-between;
   align-items: center;
+  padding: 5px;
 }
 
 main {
@@ -26,9 +28,27 @@ main {
 
 .header-icon i {
   color: #fd910d;
-  font-size: 40px;
+  font-size: 30px;
   margin: 5px;
   cursor: pointer;
+}
+
+.logo-icon i {
+  font-size: 40px;
+}
+
+.header-icon-group {
+  display: flex;
+}
+
+.header-title {
+  text-align: center;
+}
+
+.header-title i {
+  text-decoration: none;
+  font-size: 30px;
+  font-weight: 600;
 }
 
 .search-icon i {
@@ -120,7 +140,7 @@ button {
   background-color: #233d4d;
   color: #fd910d;
   padding: 10px 40px;
-  border: none;
+  border: #233d4d 3px solid;
   border-radius: 10px;
   font-weight: 600;
 }
