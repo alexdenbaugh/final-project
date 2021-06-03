@@ -1,5 +1,5 @@
-insert into "posts" ("lenderName", "gameName", "gameId", "gameThumbNail",
-                     "lenderComments", "gameImage", "description", "minPlayers",
+insert into "posts" ("lenderName", "gameName", "gameId", "thumbnail",
+                     "lenderComments", "image", "description", "minPlayers",
                      "maxPlayers", "minPlayTime", "maxPlayTime", "ageLimit",
                      "yearPublished")
 values ('Garrett Taylor', 'Catan', 13, 'https://cf.geekdo-images.com/W3Bsga_uLP9kO91gZ7H8yw__thumb/img/8a9HeqFydO7Uun_le9bXWPnidcA=/fit-in/200x150/filters:strip_icc()/pic2419375.jpg',

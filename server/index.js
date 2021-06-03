@@ -20,17 +20,20 @@ const jsonMiddleware = express.json();
 app.use(jsonMiddleware);
 
 app.post('/api/boardGamePosts', (req, res, next) => {
-  let { lender, game, gameId, gameImg, comments } = req.body;
+  let { lender, game, gameId, gameImg, comments, thumbnail, description, minPlayers, maxPlayers, minPlayTime, maxPlayTime, age, year } = req.body;
   gameId = parseInt(gameId, 10);
-  if (!lender || !game || !gameId || !gameImg || !comments) {
-    throw new ClientError(400, 'lender, game, gameId, gameImg, and comments are required fields');
+  if (!lender || !game || !gameId || !gameImg || !comments || !thumbnail || !description || !minPlayers || !maxPlayers || !minPlayTime || !maxPlayTime || !age || !year) {
+    throw new ClientError(400, 'lender, game, gameId, gameImg, comments, thumbnail, description, minPlayers, maxPlayers, minPlayTime, maxPlayTime, age and year are required fields');
   }
   const sql = `
-    insert into "posts" ("lenderName", "gameName", "gameApiId", "gameThumbNail", "lenderComments")
-    values ($1, $2, $3, $4, $5)
+    insert into "posts" ("lenderName", "gameName", "gameId", "thumbnail",
+                     "lenderComments", "image", "description", "minPlayers",
+                     "maxPlayers", "minPlayTime", "maxPlayTime", "ageLimit",
+                     "yearPublished")
+    values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
     returning *;
   `;
-  const params = [lender, game, gameId, gameImg, comments];
+  const params = [lender, game, gameId, thumbnail, comments, gameImg, description, minPlayers, maxPlayers, minPlayTime, maxPlayTime, age, year];
   db.query(sql, params)
     .then(result => {
       const [post] = result.rows;
