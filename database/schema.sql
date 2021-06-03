@@ -19,7 +19,7 @@ create table "posts" (
   "maxPlayers"     integer        not null,
   "minPlayTime"    integer        not null,
   "maxPlayTime"    integer        not null,
-  "ageRange"       text           not null,
+  "ageLimit"       integer        not null,
   "yearPublished"  integer        not null,
   "createdAt"      timestamptz(6) not null default now(),
   primary key ("postId")
