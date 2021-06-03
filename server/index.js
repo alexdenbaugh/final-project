@@ -22,6 +22,12 @@ app.use(jsonMiddleware);
 app.post('/api/boardGamePosts', (req, res, next) => {
   let { lender, game, gameId, gameImg, comments, thumbnail, description, minPlayers, maxPlayers, minPlayTime, maxPlayTime, age, year } = req.body;
   gameId = parseInt(gameId, 10);
+  minPlayers = parseInt(minPlayers, 10);
+  maxPlayers = parseInt(maxPlayers, 10);
+  minPlayTime = parseInt(minPlayTime, 10);
+  maxPlayTime = parseInt(maxPlayTime, 10);
+  age = parseInt(age, 10);
+  year = parseInt(year, 10);
   if (!lender || !game || !gameId || !gameImg || !comments || !thumbnail || !description || !minPlayers || !maxPlayers || !minPlayTime || !maxPlayTime || !age || !year) {
     throw new ClientError(400, 'lender, game, gameId, gameImg, comments, thumbnail, description, minPlayers, maxPlayers, minPlayTime, maxPlayTime, age and year are required fields');
   }
@@ -119,10 +125,12 @@ app.get('/api/boardGameInfo/:gameId', (req, res, next) => {
               maxplaytime: [maxPlayTime],
               minplayers: [minPlayers],
               maxplayers: [maxPlayers],
-              description: [description]
+              description: [description],
+              age: [age],
+              yearpublished: [yearPublished]
             }
           ] = game.boardgames.boardgame;
-          description = description.split('<br/><br/>').join('/n');
+          description = description.split('<br/>').join('/n');
           const gameInfo = {
             thumbnailUrl,
             imageUrl,
@@ -130,7 +138,9 @@ app.get('/api/boardGameInfo/:gameId', (req, res, next) => {
             maxPlayTime,
             minPlayers,
             maxPlayers,
-            description
+            description,
+            age,
+            yearPublished
           };
           res.status(200).send(gameInfo);
         })

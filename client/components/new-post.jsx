@@ -88,7 +88,15 @@ export default class NewPostForm extends React.Component {
       gameId: this.state.chosenGame.gameId,
       gameImg: this.state.chosenGame.imageUrl,
       game: event.target.elements.game.value,
-      lender: event.target.elements.name.value
+      lender: event.target.elements.name.value,
+      thumbnail: this.state.chosenGame.thumbnailUrl,
+      description: this.state.chosenGame.description,
+      minPlayers: this.state.chosenGame.minPlayers,
+      maxPlayers: this.state.chosenGame.maxPlayers,
+      minPlayTime: this.state.chosenGame.minPlayTime,
+      maxPlayTime: this.state.chosenGame.maxPlayTime,
+      age: this.state.chosenGame.age,
+      year: this.state.chosenGame.yearPublished
     };
     body = JSON.stringify(body);
     const init = {

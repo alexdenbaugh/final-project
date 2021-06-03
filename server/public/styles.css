@@ -199,6 +199,56 @@ div.form-button {
   margin: 0;
 }
 
+.post-item {
+  display: flex;
+  margin: 10px 0;
+  background-color: #e5e5e5;
+  border: #233d4d 7px solid;
+  border-radius: 10px;
+  padding: 7px;
+}
+
+.post-item:hover {
+  border: #fd910d 7px solid;
+}
+
+.post-item-info {
+  padding: 5px;
+  width: calc(200% / 3);
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-around;
+}
+
+.post-item-info div {
+  width: 100%;
+  margin: 4px 4px 4px 0;
+  text-align: center;
+}
+
+.post-item-info h3 {
+  border-radius: 3px;
+  margin: 0;
+}
+
+.post-item-info-title {
+  background-color: #233d4d;
+  border: #233d4d 2px solid;
+  width: 100%;
+}
+
+.post-item-info-value {
+  background-color: white;
+  color: #233d4d;
+  border: #233d4d 2px solid;
+}
+
+.post-item-img {
+  display: flex;
+  align-items: center;
+  width: calc(100% / 3);
+}
+
 .hidden {
   display: none;
 }
