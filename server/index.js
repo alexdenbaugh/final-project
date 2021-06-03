@@ -139,6 +139,34 @@ app.get('/api/boardGameInfo/:gameId', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.get('/api/boardGamePosts', (req, res, next) => {
+  const sql = `
+    select "postId"
+           "lenderName",
+           "gameName",
+           "gameId",
+           "thumbnail",
+           "lenderComments",
+           "image",
+           "description",
+           "minPlayers",
+           "maxPlayers",
+           "minPlayTime",
+           "maxPlayTime",
+           "ageLimit",
+           "yearPublished"
+      from "posts"
+  order by "createdAt" desc
+     limit 10;
+  `;
+  db.query(sql)
+    .then(result => {
+      const posts = result.rows;
+      res.status(200).send(posts);
+    })
+    .catch(err => next(err));
+});
+
 app.use(staticMiddleware);
 app.use(errorMiddleware);
 
