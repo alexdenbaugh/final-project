@@ -141,7 +141,7 @@ app.get('/api/boardGameInfo/:gameId', (req, res, next) => {
 
 app.get('/api/boardGamePosts', (req, res, next) => {
   const sql = `
-    select "postId"
+    select "postId",
            "lenderName",
            "gameName",
            "gameId",
@@ -163,6 +163,44 @@ app.get('/api/boardGamePosts', (req, res, next) => {
     .then(result => {
       const posts = result.rows;
       res.status(200).send(posts);
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/boardGamePosts/search/:value', (req, res, next) => {
+  const search = req.params.value;
+  if (!search) {
+    throw new ClientError(400, 'value is a required field.');
+  }
+  const sql = `
+    select "postId",
+           "lenderName",
+           "gameName",
+           "gameId",
+           "thumbnail",
+           "lenderComments",
+           "image",
+           "description",
+           "minPlayers",
+           "maxPlayers",
+           "minPlayTime",
+           "maxPlayTime",
+           "ageLimit",
+           "yearPublished"
+      from "posts"
+     where to_tsvector("gameName" || ' ' || "lenderName") @@ to_tsquery($1)
+  order by "createdAt" desc
+     limit 10;
+  `;
+  const params = [search];
+  db.query(sql, params)
+    .then(result => {
+      const posts = result.rows;
+      if (posts.length < 1) {
+        throw new ClientError(404, 'no posts were found');
+      } else {
+        res.status(200).send(posts);
+      }
     })
     .catch(err => next(err));
 });
