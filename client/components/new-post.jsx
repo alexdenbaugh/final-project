@@ -1,5 +1,6 @@
 import React from 'react';
 import debounce from '../lib/debounce';
+import DOMPurify from 'dompurify';
 
 export default class NewPostForm extends React.Component {
   constructor(props) {
@@ -28,6 +29,7 @@ export default class NewPostForm extends React.Component {
     fetch(`/api/boardGameInfo/${chosenGame.gameId}`)
       .then(response => response.json())
       .then(gameInfo => {
+        gameInfo.description = DOMPurify.sanitize(gameInfo.description);
         gameInfo.name = chosenGame.name;
         gameInfo.gameId = chosenGame.gameId;
         this.setState({ chosenGame: gameInfo, searchStatus: 'empty', modalView: 'none' });
@@ -88,7 +90,15 @@ export default class NewPostForm extends React.Component {
       gameId: this.state.chosenGame.gameId,
       gameImg: this.state.chosenGame.imageUrl,
       game: event.target.elements.game.value,
-      lender: event.target.elements.name.value
+      lender: event.target.elements.name.value,
+      thumbnail: this.state.chosenGame.thumbnailUrl,
+      description: this.state.chosenGame.description,
+      minPlayers: this.state.chosenGame.minPlayers,
+      maxPlayers: this.state.chosenGame.maxPlayers,
+      minPlayTime: this.state.chosenGame.minPlayTime,
+      maxPlayTime: this.state.chosenGame.maxPlayTime,
+      age: this.state.chosenGame.age,
+      year: this.state.chosenGame.yearPublished
     };
     body = JSON.stringify(body);
     const init = {

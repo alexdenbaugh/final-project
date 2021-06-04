@@ -20,17 +20,26 @@ const jsonMiddleware = express.json();
 app.use(jsonMiddleware);
 
 app.post('/api/boardGamePosts', (req, res, next) => {
-  let { lender, game, gameId, gameImg, comments } = req.body;
-  gameId = parseInt(gameId, 10);
-  if (!lender || !game || !gameId || !gameImg || !comments) {
-    throw new ClientError(400, 'lender, game, gameId, gameImg, and comments are required fields');
+  let { lender, game, gameId, gameImg, comments, thumbnail, description, minPlayers, maxPlayers, minPlayTime, maxPlayTime, age, year } = req.body;
+  if (!lender || !game || !gameId || !gameImg || !comments || !thumbnail || !description || !minPlayers || !maxPlayers || !minPlayTime || !maxPlayTime || !age || !year) {
+    throw new ClientError(400, 'lender, game, gameId, gameImg, comments, thumbnail, description, minPlayers, maxPlayers, minPlayTime, maxPlayTime, age and year are required fields');
   }
+  gameId = parseInt(gameId, 10);
+  minPlayers = parseInt(minPlayers, 10);
+  maxPlayers = parseInt(maxPlayers, 10);
+  minPlayTime = parseInt(minPlayTime, 10);
+  maxPlayTime = parseInt(maxPlayTime, 10);
+  age = parseInt(age, 10);
+  year = parseInt(year, 10);
   const sql = `
-    insert into "posts" ("lenderName", "gameName", "gameApiId", "gameThumbNail", "lenderComments")
-    values ($1, $2, $3, $4, $5)
+    insert into "posts" ("lenderName", "gameName", "gameId", "thumbnail",
+                     "lenderComments", "image", "description", "minPlayers",
+                     "maxPlayers", "minPlayTime", "maxPlayTime", "ageLimit",
+                     "yearPublished")
+    values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
     returning *;
   `;
-  const params = [lender, game, gameId, gameImg, comments];
+  const params = [lender, game, gameId, thumbnail, comments, gameImg, description, minPlayers, maxPlayers, minPlayTime, maxPlayTime, age, year];
   db.query(sql, params)
     .then(result => {
       const [post] = result.rows;
@@ -108,7 +117,7 @@ app.get('/api/boardGameInfo/:gameId', (req, res, next) => {
           if (game.boardgames.boardgame.length < 1) {
             throw new ClientError(404, `Could not find game with id: ${gameId}.`);
           }
-          let [
+          const [
             {
               thumbnail: [thumbnailUrl],
               image: [imageUrl],
@@ -116,10 +125,11 @@ app.get('/api/boardGameInfo/:gameId', (req, res, next) => {
               maxplaytime: [maxPlayTime],
               minplayers: [minPlayers],
               maxplayers: [maxPlayers],
-              description: [description]
+              description: [description],
+              age: [age],
+              yearpublished: [yearPublished]
             }
           ] = game.boardgames.boardgame;
-          description = description.split('<br/><br/>').join('/n');
           const gameInfo = {
             thumbnailUrl,
             imageUrl,
@@ -127,11 +137,79 @@ app.get('/api/boardGameInfo/:gameId', (req, res, next) => {
             maxPlayTime,
             minPlayers,
             maxPlayers,
-            description
+            description,
+            age,
+            yearPublished
           };
           res.status(200).send(gameInfo);
         })
         .catch(err => next(err));
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/boardGamePosts', (req, res, next) => {
+  const sql = `
+    select "postId",
+           "lenderName",
+           "gameName",
+           "gameId",
+           "thumbnail",
+           "lenderComments",
+           "image",
+           "description",
+           "minPlayers",
+           "maxPlayers",
+           "minPlayTime",
+           "maxPlayTime",
+           "ageLimit",
+           "yearPublished"
+      from "posts"
+  order by "createdAt" desc
+     limit 10;
+  `;
+  db.query(sql)
+    .then(result => {
+      const posts = result.rows;
+      res.status(200).send(posts);
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/boardGamePosts/search/:value', (req, res, next) => {
+  const search = req.params.value;
+  if (!search) {
+    throw new ClientError(400, 'value is a required field.');
+  }
+  const sql = `
+    select "postId",
+           "lenderName",
+           "gameName",
+           "gameId",
+           "thumbnail",
+           "lenderComments",
+           "image",
+           "description",
+           "minPlayers",
+           "maxPlayers",
+           "minPlayTime",
+           "maxPlayTime",
+           "ageLimit",
+           "yearPublished"
+      from "posts"
+     where to_tsvector("gameName" || ' ' || "lenderName") @@ to_tsquery($1)
+  order by "createdAt" desc
+     limit 10;
+  `;
+  const params = [search];
+  db.query(sql, params)
+    .then(result => {
+      const posts = result.rows;
+      if (posts.length < 1) {
+        throw new ClientError(404, 'no posts were found');
+      } else {
+        res.status(200).send(posts);
+      }
     })
     .catch(err => next(err));
 });
