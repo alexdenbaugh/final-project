@@ -147,7 +147,7 @@ export default class Posts extends React.Component {
                 <img className="shadow" src={post.image} alt={post.gameName} />
               </div>
               <div className="col-1 post-info-block-container">
-                <div className="post-info-block">
+                <div className="post-info-block shadow">
                   <div className="post-info-block-title">
                     <h3 className="orange">Players:</h3>
                   </div>
@@ -155,7 +155,7 @@ export default class Posts extends React.Component {
                     <h3 className="lora">{post.minPlayers === post.maxPlayers ? `${post.maxPlayers}` : `${post.minPlayers} - ${post.maxPlayers}`}</h3>
                   </div>
                 </div>
-                <div className="post-info-block">
+                <div className="post-info-block shadow">
                   <div className="post-info-block-title">
                     <h3 className="orange">Play Time:</h3>
                   </div>
@@ -163,7 +163,7 @@ export default class Posts extends React.Component {
                     <h3 className="lora">{post.minPlayTime === post.maxPlayTime ? `${post.maxPlayTime} min` : `${post.minPlayTime} - ${post.maxPlayTime} min`}</h3>
                   </div>
                 </div>
-                <div className="post-info-block">
+                <div className="post-info-block shadow">
                   <div className="post-info-block-title">
                     <h3 className="orange">Ages:</h3>
                   </div>
@@ -171,7 +171,7 @@ export default class Posts extends React.Component {
                     <h3 className="lora">{`${post.ageLimit}+`}</h3>
                   </div>
                 </div>
-                <div className="post-info-block">
+                <div className="post-info-block shadow">
                   <div className="post-info-block-title">
                     <h3 className="orange">Year:</h3>
                   </div>
