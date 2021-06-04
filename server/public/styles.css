@@ -214,6 +214,7 @@ div.form-button {
 
 .post-item:hover {
   border: #fd910d 7px solid;
+  cursor: pointer;
 }
 
 .post-item-info {
