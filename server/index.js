@@ -130,7 +130,6 @@ app.get('/api/boardGameInfo/:gameId', (req, res, next) => {
               yearpublished: [yearPublished]
             }
           ] = game.boardgames.boardgame;
-          // description = description.split('<br/>').join('/n');
           const gameInfo = {
             thumbnailUrl,
             imageUrl,

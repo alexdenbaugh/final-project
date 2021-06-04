@@ -98,7 +98,7 @@ export default class Posts extends React.Component {
     if (this.state.view === 'postings') {
       return (
         <>
-          <div className="row row-2">
+          <div className="row row-2 post-search-bar">
             <div className="search-input shadow col-2">
               <div className="search-icon">
                 <label htmlFor="search-bar-postings-view"><i className="orange fas fa-search"></i></label>
@@ -119,7 +119,7 @@ export default class Posts extends React.Component {
     } else if (this.state.view === 'search') {
       return (
         <>
-          <div className="row row-2">
+          <div className="row row-2 post-search-bar">
             <div className="search-input shadow col-2">
               <div className="search-icon">
                 <label htmlFor="search-bar-search-view"><i className="orange fas fa-search"></i></label>
@@ -141,8 +141,8 @@ export default class Posts extends React.Component {
               <h1 className="orange">{post.gameName}</h1>
             </div>
           </div>
-          <div className="row">
-            <div className="col-2 row-2">
+          <div className="row row-2">
+            <div className="col-2 post-info-left">
               <div className="col-1 image-post">
                 <img className="shadow" src={post.image} alt={post.gameName} />
               </div>
@@ -152,7 +152,7 @@ export default class Posts extends React.Component {
                     <h3 className="orange">Players:</h3>
                   </div>
                   <div className="post-info-block-value">
-                    <h3 className="lora">{`${post.minPlayers} - ${post.maxPlayers}`}</h3>
+                    <h3 className="lora">{post.minPlayers === post.maxPlayers ? `${post.maxPlayers}` : `${post.minPlayers} - ${post.maxPlayers}`}</h3>
                   </div>
                 </div>
                 <div className="post-info-block">
@@ -160,7 +160,7 @@ export default class Posts extends React.Component {
                     <h3 className="orange">Play Time:</h3>
                   </div>
                   <div className="post-info-block-value">
-                    <h3 className="lora">{`${post.minPlayTime} - ${post.maxPlayTime} min`}</h3>
+                    <h3 className="lora">{post.minPlayTime === post.maxPlayTime ? `${post.maxPlayTime} min` : `${post.minPlayTime} - ${post.maxPlayTime} min`}</h3>
                   </div>
                 </div>
                 <div className="post-info-block">
@@ -181,7 +181,7 @@ export default class Posts extends React.Component {
                 </div>
               </div>
             </div>
-            <div className="col-2">
+            <div className="col-2 post-info-right">
               <div className="col-1 post-info-text">
                 <div className="shadow post-info-text-title">
                   <h3 className="orange">Description:</h3>
@@ -234,7 +234,7 @@ function PostingList(props) {
       );
     });
     return (
-      <div className="row row-2">
+      <div className="row row-2 post-list">
         { $postList }
       </div>
     );
