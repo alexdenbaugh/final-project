@@ -21,6 +21,9 @@ app.use(jsonMiddleware);
 
 app.post('/api/boardGamePosts', (req, res, next) => {
   let { lender, game, gameId, gameImg, comments, thumbnail, description, minPlayers, maxPlayers, minPlayTime, maxPlayTime, age, year } = req.body;
+  if (!lender || !game || !gameId || !gameImg || !comments || !thumbnail || !description || !minPlayers || !maxPlayers || !minPlayTime || !maxPlayTime || !age || !year) {
+    throw new ClientError(400, 'lender, game, gameId, gameImg, comments, thumbnail, description, minPlayers, maxPlayers, minPlayTime, maxPlayTime, age and year are required fields');
+  }
   gameId = parseInt(gameId, 10);
   minPlayers = parseInt(minPlayers, 10);
   maxPlayers = parseInt(maxPlayers, 10);
@@ -28,9 +31,6 @@ app.post('/api/boardGamePosts', (req, res, next) => {
   maxPlayTime = parseInt(maxPlayTime, 10);
   age = parseInt(age, 10);
   year = parseInt(year, 10);
-  if (!lender || !game || !gameId || !gameImg || !comments || !thumbnail || !description || !minPlayers || !maxPlayers || !minPlayTime || !maxPlayTime || !age || !year) {
-    throw new ClientError(400, 'lender, game, gameId, gameImg, comments, thumbnail, description, minPlayers, maxPlayers, minPlayTime, maxPlayTime, age and year are required fields');
-  }
   const sql = `
     insert into "posts" ("lenderName", "gameName", "gameId", "thumbnail",
                      "lenderComments", "image", "description", "minPlayers",
@@ -117,7 +117,7 @@ app.get('/api/boardGameInfo/:gameId', (req, res, next) => {
           if (game.boardgames.boardgame.length < 1) {
             throw new ClientError(404, `Could not find game with id: ${gameId}.`);
           }
-          let [
+          const [
             {
               thumbnail: [thumbnailUrl],
               image: [imageUrl],
@@ -130,7 +130,7 @@ app.get('/api/boardGameInfo/:gameId', (req, res, next) => {
               yearpublished: [yearPublished]
             }
           ] = game.boardgames.boardgame;
-          description = description.split('<br/>').join('/n');
+          // description = description.split('<br/>').join('/n');
           const gameInfo = {
             thumbnailUrl,
             imageUrl,

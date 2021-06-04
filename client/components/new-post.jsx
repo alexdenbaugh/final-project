@@ -1,5 +1,6 @@
 import React from 'react';
 import debounce from '../lib/debounce';
+import DOMPurify from 'dompurify';
 
 export default class NewPostForm extends React.Component {
   constructor(props) {
@@ -28,6 +29,7 @@ export default class NewPostForm extends React.Component {
     fetch(`/api/boardGameInfo/${chosenGame.gameId}`)
       .then(response => response.json())
       .then(gameInfo => {
+        gameInfo.description = DOMPurify.sanitize(gameInfo.description);
         gameInfo.name = chosenGame.name;
         gameInfo.gameId = chosenGame.gameId;
         this.setState({ chosenGame: gameInfo, searchStatus: 'empty', modalView: 'none' });

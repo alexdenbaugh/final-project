@@ -254,6 +254,72 @@ div.form-button {
   width: calc(100% / 3);
 }
 
+.post-info-game {
+  background-color: #233d4d;
+  width: 100%;
+  text-align: center;
+  margin: 20px 0;
+  padding: 10px;
+  border-top: #fd910d 3px solid;
+  border-bottom: #fd910d 3px solid;
+}
+
+.post-info-game h1 {
+  text-align: center;
+  margin: 0;
+}
+
+.post-info-block {
+  background-color: #e5e5e5;
+  border: #233d4d 3px solid;
+  width: 45%;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.post-info-block h3,
+.post-info-text-title h3,
+.post-info-text-value h3,
+.post-info-text-value-long h3 {
+  margin: 0;
+}
+
+.post-info-block-title {
+  background-color: #233d4d;
+  width: 100%;
+  padding: 5px;
+}
+
+.post-info-block-value {
+  width: 100%;
+  padding: 10px 0;
+}
+
+.post-info-text {
+  margin: 0 0 20px;
+}
+
+.post-info-text-title {
+  background-color: #233d4d;
+  padding: 8px 15px;
+  width: fit-content;
+  border-radius: 10px;
+  margin-bottom: 10px;
+}
+
+.post-info-text-value,
+.post-info-text-value-long {
+  background-color: #e5e5e5;
+  border: #233d4d 3px solid;
+  border-radius: 10px;
+  padding: 5px;
+}
+
+.post-info-text-value-long {
+  height: 180px;
+  overflow-y: auto;
+}
+
 .hidden {
   display: none;
 }
