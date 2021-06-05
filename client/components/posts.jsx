@@ -6,14 +6,12 @@ export default class Posts extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      view: 'postings',
       searchStatus: 'empty',
       searchValue: '',
       recentPosts: [],
       searchedPosts: [],
       selectedPost: ''
     };
-    this.changeView = this.changeView.bind(this);
     this.showPost = this.showPost.bind(this);
     this.handleType = this.handleType.bind(this);
     this.renderView = this.renderView.bind(this);
@@ -30,22 +28,14 @@ export default class Posts extends React.Component {
       });
   }
 
-  changeView(event) {
-    if (event.target.dataset.view === 'search') {
-      this.setState({ view: 'search' });
-      this.context.backGroundColor({ bgColor: 'bg-dark-grey' });
-    }
-  }
-
   showPost(event) {
     let selectedPost;
-    if (this.state.view === 'postings') {
+    if (this.context.route.path === 'posts') {
       selectedPost = this.state.recentPosts.find(post => `${post.postId}` === event.target.dataset.postid);
-    } else if (this.state.view === 'search') {
+    } else if (this.context.route.path === 'post-search') {
       selectedPost = this.state.searchedPosts.find(post => `${post.postId}` === event.target.dataset.postid);
     }
-    this.setState({ view: 'postInfo', selectedPost });
-    this.context.backGroundColor({ bgColor: '' });
+    this.setState({ selectedPost });
   }
 
   handleType(event) {
@@ -95,16 +85,16 @@ export default class Posts extends React.Component {
   }
 
   renderView() {
-    if (this.state.view === 'postings') {
+    if (this.context.route.path === 'posts') {
       return (
         <>
           <div className="row row-2 post-search-bar">
-            <div className="search-input shadow col-2">
+            <a href="#post-search" className="search-input shadow col-2">
               <div className="search-icon">
                 <label htmlFor="search-bar-postings-view"><i className="orange fas fa-search"></i></label>
               </div>
-              <input onClick={this.changeView} data-view="search" readOnly type="text" className="lora" id="search-bar-postings-view" placeholder="Search for a game..." />
-            </div>
+              <input data-view="search" readOnly type="text" className="lora" id="search-bar-postings-view" placeholder="Search for a game..." />
+            </a>
           </div>
           <div className="row">
             <div className="col-4 bookmark title shadow">
@@ -116,7 +106,7 @@ export default class Posts extends React.Component {
           </div>
         </>
       );
-    } else if (this.state.view === 'search') {
+    } else if (this.context.route.path === 'post-search') {
       return (
         <>
           <div className="row row-2 post-search-bar">
@@ -132,7 +122,7 @@ export default class Posts extends React.Component {
           </div>
         </>
       );
-    } else if (this.state.view === 'postInfo') {
+    } else if (this.context.route.path === 'post-info') {
       const post = this.state.selectedPost;
       return (
         <>
@@ -249,7 +239,7 @@ function PostItem(props) {
     postId
   } = props.info;
   return (
-    <div className="post-item col-2 shadow" onClick={props.showPost} data-postid={postId}>
+    <a href="#post-info" className="post-item col-2 shadow" onClick={props.showPost} data-postid={postId}>
       <div className="post-item-info" data-postid={postId}>
         <div data-postid={postId}>
           <h3 className="orange shadow post-item-info-title" data-postid={postId}>Title</h3>
@@ -267,6 +257,6 @@ function PostItem(props) {
       <div className="post-item-img" data-postid={postId}>
         <img src={image} alt={game} className="shadow" data-postid={postId}/>
       </div>
-    </div>
+    </a>
   );
 }

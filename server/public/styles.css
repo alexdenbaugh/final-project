@@ -85,16 +85,19 @@ a {
   background-color: #e5e5e5;
 }
 
-a.close-menu {
+button.close-menu {
   font-size: 40px;
   width: fit-content;
-  height: fit-content;
+  height: 100%;
+  text-align: center;
+  padding: 0 6px;
 }
 
-a.user-menu {
+button.user-menu {
   font-size: 30px;
   width: fit-content;
   height: fit-content;
+  padding: 0;
 }
 
 .menu-options {
@@ -110,7 +113,6 @@ a.user-menu {
   background-color: #233d4d;
   height: 50px;
   width: 100%;
-  padding: 3px 10px;
 }
 
 .user-menu-head {
@@ -118,7 +120,7 @@ a.user-menu {
   padding: 8px 10px;
 }
 
-button.burger-menu-item {
+a.burger-menu-item {
   border-radius: 0;
   display: flex;
   justify-content: space-between;
@@ -128,7 +130,7 @@ button.burger-menu-item {
   margin: 2px 0;
 }
 
-button.user-menu-item {
+a.user-menu-item {
   border-radius: 0;
   display: flex;
   justify-content: center;

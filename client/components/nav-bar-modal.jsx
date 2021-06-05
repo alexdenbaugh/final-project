@@ -20,7 +20,7 @@ export default class NavBarModal extends React.Component {
     if (modal === 'burger-menu') {
       return (
         <>
-          <button href="#posts" className={`shadow text-shadow ${modal}-item`}>
+          <a href="#posts" className={`shadow text-shadow ${modal}-item`}>
             <div className="menu-item-type">
               <div className="menu-item-icon">
                 <i className="fas fa-dice"></i>
@@ -32,8 +32,8 @@ export default class NavBarModal extends React.Component {
             <div className="menu-item-arrow">
               <i className="fas fa-chevron-right"></i>
             </div>
-          </button>
-          <button href="#create-post" onClick={this.handleClick} className="shadow text-shadow burger-menu-item" data-view="new-post">
+          </a>
+          <a href="#create-post" onClick={this.handleClick} className="shadow text-shadow burger-menu-item" data-view="new-post">
             <div className="menu-item-type" data-view="new-post">
               <div className="menu-item-icon" data-view="new-post">
                 <i className="fas fa-plus" data-view="new-post"></i>
@@ -45,7 +45,7 @@ export default class NavBarModal extends React.Component {
             <div data-view="new-post" className="menu-item-arrow">
               <i data-view="new-post" className="fas fa-chevron-right"></i>
             </div>
-          </button>
+          </a>
         </>
       );
     } else if (modal === 'user-menu') {
@@ -65,9 +65,9 @@ export default class NavBarModal extends React.Component {
       <div onClick={handleHeader} className={`${hidden} ${modal}-nav-modal-container`}>
         <div className={`${modal}-container`}>
           <div className={`shadow ${modal}-head`}>
-            {modal === 'burger-menu'
-              ? <a onClick={handleHeader} href="" className="text-shadow close-menu"><i className="fas fa-times"></i></a>
-              : <a onClick={handleHeader} href="" className="text-shadow user-menu"><i className="fas fa-user"></i></a>
+            { modal === 'burger-menu'
+              ? <button onClick={handleHeader} className="text-shadow close-menu"><i className="fas fa-times"></i></button>
+              : <button onClick={handleHeader} className="text-shadow user-menu"><i className="fas fa-user"></i></button>
             }
           </div>
           <div className="menu-options">

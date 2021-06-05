@@ -17,12 +17,16 @@ export default class App extends React.Component {
       route: parseRoute(window.location.hash)
     };
     this.handleHeader = this.handleHeader.bind(this);
-    this.backGroundColor = this.backGroundColor.bind(this);
+    this.renderPage = this.renderPage.bind(this);
   }
 
   componentDidMount() {
     window.addEventListener('hashchange', () => {
-      // console.log('change!')
+      if (window.location.hash === '#create-post-search' || window.location.hash === '#post-search') {
+        this.setState({ bgColor: 'bg-dark-grey' });
+      } else {
+        this.setState({ bgColor: '' });
+      }
       this.setState({
         route: parseRoute(window.location.hash)
       });
@@ -30,7 +34,6 @@ export default class App extends React.Component {
   }
 
   handleHeader(event) {
-    // console.log('handleheader event:', event)
     if (event.target.dataset.view === 'burger-menu') {
       this.setState({ modal: 'burger-menu' });
     } else if (event.target.dataset.view === 'user-menu') {
@@ -38,10 +41,6 @@ export default class App extends React.Component {
     } else {
       this.setState({ modal: 'hidden' });
     }
-  }
-
-  backGroundColor(props) {
-    this.setState({ bgColor: props.bgColor });
   }
 
   renderPage() {
@@ -59,9 +58,9 @@ export default class App extends React.Component {
 
   render() {
     const { bgColor, route, modal } = this.state;
-    const { backGroundColor, handleHeader } = this;
+    const { handleHeader } = this;
 
-    const contextValue = { bgColor, route, modal, backGroundColor, handleHeader };
+    const contextValue = { bgColor, route, modal, handleHeader };
     return (
       <AppContext.Provider value={ contextValue }>
         <Header />
