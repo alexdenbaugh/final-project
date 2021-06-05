@@ -108,7 +108,7 @@ export default class Posts extends React.Component {
           </div>
           <div className="row">
             <div className="col-4 bookmark title shadow">
-              <h1 className="orange">Postings</h1>
+              <h1 className="text-shadow orange">Postings</h1>
             </div>
           </div>
           <div className="postings-container">
@@ -138,7 +138,7 @@ export default class Posts extends React.Component {
         <>
           <div className="row">
             <div className="col-1 post-info-game shadow">
-              <h1 className="orange">{post.gameName}</h1>
+              <h1 className="text-shadow orange">{post.gameName}</h1>
             </div>
           </div>
           <div className="row row-2">
