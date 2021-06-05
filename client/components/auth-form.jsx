@@ -1,4 +1,5 @@
 import React from 'react';
+import checkPassword from '../lib/password-check';
 
 export default class AuthForm extends React.Component {
   constructor(props) {
@@ -6,16 +7,75 @@ export default class AuthForm extends React.Component {
     this.state = {
       username: '',
       password: '',
-      confirmPassword: ''
+      confirmPassword: '',
+      usernameIcon: 'hidden',
+      passwordIcon: 'hidden',
+      confirmPasswordIcon: 'hidden',
+      errorUser: '',
+      errorReq: '',
+      errorMatch: ''
+
     };
     this.handleChange = this.handleChange.bind(this);
+    this.handleCredentials = this.handleCredentials.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(event) {
     // console.log('change!', event)
     const { name, value } = event.target;
-    this.setState({ [name]: value });
+    this.setState({ [name]: value }, this.handleCredentials);
+  }
+
+  handleCredentials() {
+    const { username, password, confirmPassword } = this.state;
+    if (password.length > 0 && password.length < 8) {
+      this.setState({
+        passwordIcon: 'invalid-icon fas fa-times', errorReq: ''
+      });
+    } else if (password.length >= 8 && !checkPassword(password)) {
+      this.setState({
+        passwordIcon: 'invalid-icon fas fa-times', errorReq: 'Password doesn\'t meet the requirements'
+      });
+    } else if (password.length >= 8) {
+      this.setState({
+        passwordIcon: 'valid-icon fas fa-check', errorReq: ''
+      });
+    } else {
+      this.setState({
+        passwordIcon: 'hidden', errorReq: ''
+      });
+    }
+    if (confirmPassword.length === 0) {
+      this.setState({
+        confirmPasswordIcon: 'hidden', errorMatch: ''
+      });
+    } else if (confirmPassword === password) {
+      this.setState({
+        confirmPasswordIcon: 'valid-icon fas fa-check', errorMatch: ''
+      });
+    } else {
+      this.setState({
+        confirmPasswordIcon: 'invalid-icon fas fa-times', errorMatch: 'Password don\'t match'
+      });
+    }
+    if (username.length === 0) {
+      this.setState({
+        usernameIcon: 'hidden', errorUser: ''
+      });
+    } else if (!username.match('^[0-9a-zA-Z]+$')) {
+      this.setState({
+        usernameIcon: 'invalid-icon fas fa-times', errorUser: 'No special characters'
+      });
+    } else if (username.length < 6) {
+      this.setState({
+        usernameIcon: 'invalid-icon fas fa-times', errorUser: ''
+      });
+    } else {
+      this.setState({
+        usernameIcon: 'valid-icon fas fa-check', errorUser: ''
+      });
+    }
   }
 
   handleSubmit(event) {
@@ -37,8 +97,13 @@ export default class AuthForm extends React.Component {
                 <label className="orange" htmlFor="username">Username:</label>
               </div>
               <div className="input auth-form-input">
-                <input required autoFocus type="text" onChange={this.handleChange} className="lora shadow" name="username" id="username" />
-                <i className="valid-icon fas fa-check"></i>
+                <input required autoFocus minLength="6" maxLength="16" type="text" onChange={this.handleChange} value={this.state.username} className="lora shadow" name="username" id="username" />
+                <i className={this.state.usernameIcon}></i>
+                {
+                  this.state.errorUser
+                    ? <span className="invalid-text lora">{this.state.errorUser}</span>
+                    : <></>
+                }
               </div>
             </div>
             <div className="form-element">
@@ -46,9 +111,13 @@ export default class AuthForm extends React.Component {
                 <label className="orange" htmlFor="password">Password:</label>
               </div>
               <div className="input auth-form-input">
-                <input required type="password" onChange={this.handleChange} className="lora shadow" name="password" id="password" />
-                <i className="invalid-icon fas fa-times"></i>
-                <span className="invalid-text lora">Password doesn&apos;t meet the requirements</span>
+                <input required type="password" minLength="8" maxLength="20" onChange={this.handleChange} value={this.state.password} className="lora shadow" name="password" id="password" />
+                <i className={this.state.passwordIcon}></i>
+                {
+                  this.state.errorReq
+                    ? <span className="invalid-text lora">{this.state.errorReq}</span>
+                    : <></>
+                }
               </div>
             </div>
             <div className="form-element">
@@ -56,9 +125,13 @@ export default class AuthForm extends React.Component {
                 <label className="orange" htmlFor="confirmPassword">Confirm Password:</label>
               </div>
               <div className="input auth-form-input">
-                <input required type="password" onChange={this.handleChange} className="lora shadow" name="confirmPassword" id="confirmPassword" />
-                <i className="invalid-icon fas fa-times"></i>
-                <span className="invalid-text lora">Passwords don&apos;t match</span>
+                <input required type="password" minLength="8" maxLength="20" onChange={this.handleChange} value={this.state.confirmPassword} className="lora shadow" name="confirmPassword" id="confirmPassword" />
+                <i className={this.state.confirmPasswordIcon}></i>
+                {
+                  this.state.errorMatch
+                    ? <span className="invalid-text lora">{this.state.errorMatch}</span>
+                    : <></>
+                }
               </div>
             </div>
             <div className="row">
