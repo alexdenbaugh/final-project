@@ -4,6 +4,7 @@ import PageContainer from './components/page-container';
 import NewPostForm from './components/new-post';
 import AppContext from './lib/app-context';
 import Posts from './components/posts';
+import NavBarModal from './components/nav-bar-modal';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -47,18 +48,19 @@ export default class App extends React.Component {
 
   render() {
     const { bgColor } = this.state;
-    const backGroundColor = this.backGroundColor;
+    const { backGroundColor, handleHeader } = this;
 
-    const contextValue = { bgColor, backGroundColor };
+    const contextValue = { bgColor, backGroundColor, handleHeader };
     return (
       <>
-        <Header handleHeader={this.handleHeader} />
         <AppContext.Provider value={ contextValue }>
-          <main className={this.state.bgColor}>
+          <Header value={ contextValue } />
+          <main className={ this.state.bgColor }>
             <PageContainer>
               { this.renderPage() }
             </PageContainer>
           </main>
+          <NavBarModal />
         </AppContext.Provider>
       </>
     );

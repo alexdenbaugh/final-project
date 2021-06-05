@@ -52,6 +52,107 @@ a {
   cursor: pointer;
 }
 
+.burger-menu-nav-modal-container {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.925);
+  display: flex;
+}
+
+.user-menu-nav-modal-container {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.925);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.burger-menu-container {
+  width: 80%;
+  height: 100%;
+  background-color: #e5e5e5;
+}
+
+.user-menu-container {
+  width: 80%;
+  height: 100%;
+  background-color: #e5e5e5;
+}
+
+a.close-menu {
+  font-size: 40px;
+  width: fit-content;
+  height: fit-content;
+}
+
+a.user-menu {
+  font-size: 30px;
+  width: fit-content;
+  height: fit-content;
+}
+
+.menu-options {
+  width: 100%;
+  margin-top: 25px;
+  height: fit-content;
+}
+
+.burger-menu-head,
+.burger-menu-item,
+.user-menu-head,
+.user-menu-item {
+  background-color: #233d4d;
+  height: 50px;
+  width: 100%;
+  padding: 3px 10px;
+}
+
+.user-menu-head {
+  text-align: right;
+  padding: 8px 10px;
+}
+
+button.burger-menu-item {
+  border-radius: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-style: italic;
+  padding: 0 10px 0 5px;
+  margin: 2px 0;
+}
+
+button.user-menu-item {
+  border-radius: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-style: italic;
+  padding: 0 10px 0 5px;
+  margin: 2px 0;
+}
+
+.menu-item-type {
+  display: flex;
+  align-items: center;
+}
+
+.menu-item-icon {
+  margin-right: 10px;
+  font-size: 25px;
+  width: 30px;
+}
+
+.menu-item-text {
+  font-size: 20px;
+}
+
 .search-icon i {
   font-size: 25px;
   color: #fd910d;
