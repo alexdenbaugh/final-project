@@ -433,6 +433,80 @@ div.form-button {
   overflow-y: auto;
 }
 
+.auth-form-container {
+  margin-top: 20px;
+  border: #233d4d 5px solid;
+  border-radius: 10px;
+  background-color: #233d4d;
+}
+
+.auth-form-header {
+  text-align: center;
+  background-color: #233d4d;
+  height: 60px;
+  border: #233d4d 3px solid;
+  padding-top: 5px;
+}
+
+.auth-form-header-text {
+  margin: 0;
+}
+
+.auth-form {
+  background-color: #e5e5e5;
+  padding: 30px 10px 15px;
+}
+
+.auth-form > .form-element {
+  margin-bottom: 40px;
+}
+
+.auth-form-input {
+  position: relative;
+}
+
+.auth-form-input > i {
+  position: absolute;
+  right: 10px;
+  top: 11px;
+}
+
+.valid-icon {
+  color: #81ae86;
+}
+
+.invalid-icon,
+.valid-icon {
+  font-size: 20px;
+}
+
+.invalid-icon,
+.invalid-text {
+  color: #dc2626;
+}
+
+.invalid-text {
+  position: absolute;
+  left: 6px;
+  bottom: -23px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+
+.auth-form input {
+  background-color: white;
+}
+
+.form-requirements {
+  text-align: start;
+  font-weight: 600;
+}
+
+.form-requirements ul {
+  margin-top: 0;
+  padding-left: 18px;
+}
+
 .hidden {
   display: none;
 }
