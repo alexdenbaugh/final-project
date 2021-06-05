@@ -131,6 +131,8 @@ a.burger-menu-item {
 }
 
 a.user-menu-item {
+  font-size: 20px;
+  font-weight: bold;
   border-radius: 0;
   display: flex;
   justify-content: center;

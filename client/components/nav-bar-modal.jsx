@@ -9,7 +9,6 @@ export default class NavBarModal extends React.Component {
   }
 
   handleClick(event) {
-    // console.log('inNavBar click', event)
     if (event.target.dataset.view === 'new-post') {
       window.location.hash = 'create-post';
     }
@@ -50,8 +49,7 @@ export default class NavBarModal extends React.Component {
       );
     } else if (modal === 'user-menu') {
       return (
-        <></>
-        // <button href="#sign-up" className={`shadow text-shadow ${this.state.type}-item`}>Sign-up</button>
+        <a href="#sign-up" className={`shadow text-shadow ${modal}-item`}><h3>Sign-up</h3></a>
       );
     }
   }

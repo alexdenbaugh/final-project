@@ -1,11 +1,12 @@
 import React from 'react';
 import Header from './components/header';
 import PageContainer from './components/page-container';
-import NewPostForm from './components/new-post';
+import NewPostForm from './pages/new-post';
 import AppContext from './lib/app-context';
-import Posts from './components/posts';
+import Posts from './pages/posts';
 import NavBarModal from './components/nav-bar-modal';
 import parseRoute from './lib/parse-route';
+import Auth from './pages/auth';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -51,9 +52,9 @@ export default class App extends React.Component {
     if (path === '' || path === 'posts' || path === 'post-search' || path === 'post-info') {
       return <Posts />;
     }
-    // if (path === 'sign-up') {
-    //   return <Auth />
-    // }
+    if (path === 'sign-up') {
+      return <Auth />;
+    }
   }
 
   render() {
