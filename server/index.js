@@ -6,6 +6,7 @@ const ClientError = require('./client-error');
 const pg = require('pg');
 const fetch = require('node-fetch');
 const xml2js = require('xml2js');
+const argon2 = require('argon2');
 
 const app = express();
 
@@ -210,6 +211,31 @@ app.get('/api/boardGamePosts/search/:value', (req, res, next) => {
       } else {
         res.status(200).send(posts);
       }
+    })
+    .catch(err => next(err));
+});
+
+app.post('/api/auth/sign-up', (req, res, next) => {
+  const { username, password } = req.body;
+  // console.log('i hear you')
+  if (!username || !password) {
+    throw new ClientError(400, 'username and password are required fields');
+  }
+  argon2
+    .hash(password)
+    .then(hashedPassword => {
+      const sql = `
+        insert into "users" ("username", "hashedPassword")
+             values         ($1, $2)
+          returning "userId", "username", "createdAt";
+      `;
+      const params = [username, hashedPassword];
+      db.query(sql, params)
+        .then(result => {
+          const [user] = result.rows;
+          res.status(201).send(user);
+        })
+        .catch(err => next(err));
     })
     .catch(err => next(err));
 });
