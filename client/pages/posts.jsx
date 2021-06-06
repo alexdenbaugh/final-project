@@ -33,9 +33,10 @@ export default class Posts extends React.Component {
   }
 
   runSearch() {
+    const { searchValue } = this.state.searchValue;
     if (this.state.searchValue.length > 0) {
       this.setState({ searchStatus: 'searching' });
-      const currentSearch = this.activeSearch = fetch(`/api/boardGamePosts/search/${this.state.searchValue}`)
+      const currentSearch = this.activeSearch = fetch(`/api/boardGamePosts/search/${searchValue}`)
         .then(response => response.json())
         .then(posts => {
           if (this.activeSearch !== currentSearch) return;
