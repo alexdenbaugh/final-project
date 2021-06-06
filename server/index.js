@@ -177,6 +177,43 @@ app.get('/api/boardGamePosts', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.get('/api/boardGamePosts/:postId', (req, res, next) => {
+  const postId = parseInt(req.params.postId, 10);
+  if (!req.params.postId) {
+    throw new ClientError(400, 'postId is a required field.');
+  } else if (!Number.isInteger(postId) || postId <= 0) {
+    throw new ClientError(400, 'postId must be a positive integer.');
+  }
+  const sql = `
+    select "postId",
+           "lenderName",
+           "gameName",
+           "gameId",
+           "thumbnail",
+           "lenderComments",
+           "image",
+           "description",
+           "minPlayers",
+           "maxPlayers",
+           "minPlayTime",
+           "maxPlayTime",
+           "ageLimit",
+           "yearPublished"
+      from "posts"
+     where "postId" = $1;
+  `;
+  const params = [postId];
+  db.query(sql, params)
+    .then(result => {
+      const [post] = result.rows;
+      if (!post) {
+        throw new ClientError(404, `Could not find post with id ${postId}`);
+      }
+      res.status(200).send(post);
+    })
+    .catch(err => next(err));
+});
+
 app.get('/api/boardGamePosts/search/:value', (req, res, next) => {
   const search = req.params.value;
   if (!search) {

@@ -56,6 +56,16 @@ a {
   color: #fd910d;
 }
 
+button {
+  font-size: 20px;
+  background-color: #233d4d;
+  color: #fd910d;
+  padding: 10px 40px;
+  border: #233d4d 3px solid;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
 input,
 textarea,
 button,
@@ -81,10 +91,11 @@ a {
   line-height: 60%;
 }
 
-.header-icon i {
+.header-icon button {
   color: #fd910d;
+  background-color: #233d4d;
   font-size: 30px;
-  margin: 5px;
+  padding: 0 2px;
   cursor: pointer;
 }
 
@@ -139,8 +150,6 @@ button.user-menu {
 button.user-menu:hover,
 button.close-menu:hover {
   border: #233d4d 3px solid;
-
-  /* outline: none; */
 }
 
 .menu-options {
@@ -282,16 +291,6 @@ textarea {
 
 input {
   height: 40px;
-}
-
-button {
-  font-size: 20px;
-  background-color: #233d4d;
-  color: #fd910d;
-  padding: 10px 40px;
-  border: #233d4d 3px solid;
-  border-radius: 10px;
-  font-weight: 600;
 }
 
 input:hover,

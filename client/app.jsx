@@ -4,6 +4,7 @@ import PageContainer from './components/page-container';
 import NewPostForm from './pages/new-post';
 import AppContext from './lib/app-context';
 import Posts from './pages/posts';
+import PostInfo from './pages/post-info';
 import NavBarModal from './components/nav-bar-modal';
 import parseRoute from './lib/parse-route';
 import Auth from './pages/auth';
@@ -54,7 +55,7 @@ export default class App extends React.Component {
     }
     if (path === 'post-info') {
       const postId = this.state.route.params.get('postId');
-      return <Posts postId={postId} />;
+      return <PostInfo postId={postId} />;
     }
     if (path === 'sign-up') {
       return <Auth />;

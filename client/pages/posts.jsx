@@ -9,15 +9,12 @@ export default class Posts extends React.Component {
       searchStatus: 'empty',
       searchValue: '',
       recentPosts: [],
-      searchedPosts: [],
-      selectedPost: ''
+      searchedPosts: []
     };
-    this.showPost = this.showPost.bind(this);
     this.handleType = this.handleType.bind(this);
     this.renderView = this.renderView.bind(this);
     this.runSearch = debounce(this.runSearch.bind(this), 500);
     this.renderSearch = this.renderSearch.bind(this);
-    this.renderPostInfo = this.renderPostInfo.bind(this);
   }
 
   componentDidMount() {
@@ -27,16 +24,6 @@ export default class Posts extends React.Component {
         const recentPosts = postInfo.slice();
         this.setState({ recentPosts });
       });
-  }
-
-  showPost(event) {
-    let selectedPost;
-    if (this.context.route.path === 'posts') {
-      selectedPost = this.state.recentPosts.find(post => `${post.postId}` === event.target.dataset.postid);
-    } else if (this.context.route.path === 'post-search') {
-      selectedPost = this.state.searchedPosts.find(post => `${post.postId}` === event.target.dataset.postid);
-    }
-    this.setState({ selectedPost });
   }
 
   handleType(event) {
@@ -123,94 +110,7 @@ export default class Posts extends React.Component {
           </div>
         </>
       );
-    } else if (this.context.route.path === 'post-info') {
-      // const post = this.state.selectedPost;
-      // if (!this.state.selectedPost) {
-      //   post = this.props.post
-      // } else {
-      this.renderPostInfo();
-      // }
     }
-  }
-
-  renderPostInfo() {
-    const post = this.state.selectedPost;
-    return (
-      <>
-        <div className="row">
-          <div className="col-1 post-info-game shadow">
-            <h1 className="text-shadow orange">{post.gameName}</h1>
-          </div>
-        </div>
-        <div className="row row-2">
-          <div className="col-2 post-info-left">
-            <div className="col-1 image-post">
-              <img className="shadow" src={post.image} alt={post.gameName} />
-            </div>
-            <div className="col-1 post-info-block-container">
-              <div className="post-info-block shadow">
-                <div className="post-info-block-title">
-                  <h3 className="orange">Players:</h3>
-                </div>
-                <div className="post-info-block-value">
-                  <h3 className="lora">{post.minPlayers === post.maxPlayers ? `${post.maxPlayers}` : `${post.minPlayers} - ${post.maxPlayers}`}</h3>
-                </div>
-              </div>
-              <div className="post-info-block shadow">
-                <div className="post-info-block-title">
-                  <h3 className="orange">Play Time:</h3>
-                </div>
-                <div className="post-info-block-value">
-                  <h3 className="lora">{post.minPlayTime === post.maxPlayTime ? `${post.maxPlayTime} min` : `${post.minPlayTime} - ${post.maxPlayTime} min`}</h3>
-                </div>
-              </div>
-              <div className="post-info-block shadow">
-                <div className="post-info-block-title">
-                  <h3 className="orange">Ages:</h3>
-                </div>
-                <div className="post-info-block-value">
-                  <h3 className="lora">{`${post.ageLimit}+`}</h3>
-                </div>
-              </div>
-              <div className="post-info-block shadow">
-                <div className="post-info-block-title">
-                  <h3 className="orange">Year:</h3>
-                </div>
-                <div className="post-info-block-value">
-                  <h3 className="lora">{`${post.yearPublished}`}</h3>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="col-2 post-info-right">
-            <div className="col-1 post-info-text">
-              <div className="shadow post-info-text-title">
-                <h3 className="orange">Description:</h3>
-              </div>
-              <div className="col-1 shadow post-info-text-value-long">
-                <h3 dangerouslySetInnerHTML={{ __html: post.description }} className="lora"></h3>
-              </div>
-            </div>
-            <div className="col-1 post-info-text">
-              <div className="shadow post-info-text-title">
-                <h3 className="orange">Lender:</h3>
-              </div>
-              <div className="col-1 shadow post-info-text-value">
-                <h3 className="lora">{post.lenderName}</h3>
-              </div>
-            </div>
-            <div className="col-1 post-info-text">
-              <div className="shadow post-info-text-title">
-                <h3 className="orange">Lender&apos;s Comments:</h3>
-              </div>
-              <div className="col-1 shadow post-info-text-value-long">
-                <h3 className="lora">{post.lenderComments}</h3>
-              </div>
-            </div>
-          </div>
-        </div>
-      </>
-    );
   }
 
   render() {
@@ -249,23 +149,23 @@ function PostItem(props) {
     postId
   } = props.info;
   return (
-    <a href={`#post-info?postId=${postId}`} className="post-item col-2 shadow" onClick={props.showPost} data-postid={postId}>
-      <div className="post-item-info" data-postid={postId}>
-        <div data-postid={postId}>
-          <h3 className="orange shadow post-item-info-title" data-postid={postId}>Title</h3>
+    <a href={`#post-info?postId=${postId}`} className="post-item col-2 shadow">
+      <div className="post-item-info">
+        <div>
+          <h3 className="orange shadow post-item-info-title">Title</h3>
         </div>
-        <div data-postid={postId}>
-          <h3 className="shadow lora post-item-info-value" data-postid={postId}>{ game }</h3>
+        <div>
+          <h3 className="shadow lora post-item-info-value">{ game }</h3>
         </div>
-        <div data-postid={postId}>
-          <h3 className="orange shadow post-item-info-title" data-postid={postId}>Lender</h3>
+        <div>
+          <h3 className="orange shadow post-item-info-title">Lender</h3>
         </div>
-        <div data-postid={postId}>
-          <h3 className="shadow lora post-item-info-value" data-postid={postId}>{ name }</h3>
+        <div>
+          <h3 className="shadow lora post-item-info-value">{ name }</h3>
         </div>
       </div>
-      <div className="post-item-img" data-postid={postId}>
-        <img src={image} alt={game} className="shadow" data-postid={postId}/>
+      <div className="post-item-img">
+        <img src={image} alt={game} className="shadow"/>
       </div>
     </a>
   );
