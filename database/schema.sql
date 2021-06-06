@@ -33,3 +33,16 @@ create table "users" (
   primary key ("userId"),
   unique ("username")
 );
+
+create table "messages" (
+  "messageId"   serial,
+  "senderId"    integer not null,
+  "recipientId" integer not null,
+  "timeSent"    integer not null,
+  "content"     text    not null,
+  "postId"      integer not null,
+  "createdAt"      timestamptz(6) not null default now(),
+  primary key ("messageId"),
+  foreign key ("postId")
+   references "users" ("userId")
+);
