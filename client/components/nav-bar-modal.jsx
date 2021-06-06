@@ -16,6 +16,9 @@ export default class NavBarModal extends React.Component {
 
   renderMenu() {
     const { modal } = this.context;
+    const userLink = this.context.user
+      ? 'Sign-Out'
+      : 'Sign-In / Sign-Up';
     if (modal === 'burger-menu') {
       return (
         <>
@@ -47,9 +50,13 @@ export default class NavBarModal extends React.Component {
           </a>
         </>
       );
+    } else if (modal === 'user-menu' && this.context.user) {
+      return (
+        <a href="#sign-in" onClick={this.context.handleSignOut} className={`shadow text-shadow ${modal}-item`}><h3>{userLink}</h3></a>
+      );
     } else if (modal === 'user-menu') {
       return (
-        <a href="#sign-up" className={`shadow text-shadow ${modal}-item`}><h3>Sign-up</h3></a>
+        <a href="#sign-in" className={`shadow text-shadow ${modal}-item`}><h3>{userLink}</h3></a>
       );
     }
   }
@@ -63,13 +70,13 @@ export default class NavBarModal extends React.Component {
       <div onClick={handleHeader} className={`${hidden} ${modal}-nav-modal-container`}>
         <div className={`${modal}-container`}>
           <div className={`shadow ${modal}-head`}>
-            { modal === 'burger-menu'
+            {modal === 'burger-menu'
               ? <button onClick={handleHeader} className="text-shadow close-menu"><i className="fas fa-times"></i></button>
               : <button onClick={handleHeader} className="text-shadow user-menu"><i className="fas fa-user"></i></button>
             }
           </div>
           <div className="menu-options">
-            { this.renderMenu() }
+            {this.renderMenu()}
           </div>
         </div>
       </div>

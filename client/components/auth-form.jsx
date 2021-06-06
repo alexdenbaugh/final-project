@@ -13,7 +13,8 @@ export default class AuthForm extends React.Component {
       confirmPasswordIcon: 'hidden',
       errorUser: '',
       errorReq: '',
-      errorMatch: ''
+      errorMatch: '',
+      errorLogin: ''
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleCredentials = this.handleCredentials.bind(this);
@@ -21,9 +22,12 @@ export default class AuthForm extends React.Component {
   }
 
   handleChange(event) {
-    // console.log('change!', event)
     const { name, value } = event.target;
-    this.setState({ [name]: value }, this.handleCredentials);
+    if (this.props.path === 'sign-up') {
+      this.setState({ [name]: value }, this.handleCredentials);
+    } else {
+      this.setState({ [name]: value });
+    }
   }
 
   handleCredentials() {
@@ -80,21 +84,23 @@ export default class AuthForm extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     const { errorUser, errorReq, errorMatch, username, password } = this.state;
+    const { path } = this.props;
+    //
     if (errorUser || errorReq || errorMatch) {
       this.handleCredentials();
       return;
     }
-    const req = {
+    const init = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ username, password })
     };
-    fetch('/api/auth/sign-up', req)
+    fetch(`/api/auth/${path}`, init)
       .then(res => res.json())
       .then(result => {
-        if (result.error) {
+        if (result.error && path === 'sign-up') {
           this.setState({
             username: '',
             password: '',
@@ -106,20 +112,27 @@ export default class AuthForm extends React.Component {
             errorReq: '',
             errorMatch: ''
           });
+        } else if (result.error && path === 'sign-in') {
+          this.setState({
+            errorLogin: 'Invalid username/password'
+          });
         } else {
-          // console.log(result)
           window.location.hash = '#';
+          this.props.handleSignIn(result);
         }
       });
   }
 
   render() {
     const path = this.props.path;
+    const altHeader = path === 'sign-up'
+      ? 'Create An Account'
+      : 'Sign In';
     if (path === 'sign-up') {
       return (
         <div className="shadow auth-form-container">
           <div className="row auth-form-header">
-            <h1 className="orange text-shadow auth-form-header-text">Create An Account</h1>
+            <h1 className="orange text-shadow auth-form-header-text">{ altHeader }</h1>
           </div>
           <form onSubmit={this.handleSubmit} className="row auth-form">
             <div className="form-element">
@@ -174,8 +187,48 @@ export default class AuthForm extends React.Component {
                   <li>At least one special character</li>
                 </ul>
               </div>
+            </div>
+            <div className="row form-handles">
+              <a href="#sign-in" className="text-shadow auth-form-link">Sign In</a>
               <div className="form-button">
                 <button className="shadow" type="submit">Create</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      );
+    } else if (path === 'sign-in') {
+      return (
+        <div className="shadow auth-form-container">
+          <div className="row auth-form-header">
+            <h1 className="orange text-shadow auth-form-header-text">{ altHeader }</h1>
+          </div>
+          <form onSubmit={this.handleSubmit} className="row auth-form">
+            <div className="form-element">
+              <div className="label bookmark shadow">
+                <label className="orange" htmlFor="username">Username:</label>
+              </div>
+              <div className="input auth-form-input">
+                <input required autoFocus type="text" onChange={this.handleChange} value={this.state.username} className="lora shadow" name="username" id="username" />
+              </div>
+            </div>
+            <div className="form-element">
+              <div className="label bookmark shadow">
+                <label className="orange" htmlFor="password">Password:</label>
+              </div>
+              <div className="input auth-form-input">
+                <input required type="password" onChange={this.handleChange} value={this.state.password} className="lora shadow" name="password" id="password" />
+                {
+                  this.state.errorLogin
+                    ? <span className="invalid-text lora">{this.state.errorLogin}</span>
+                    : <></>
+                }
+              </div>
+            </div>
+            <div className="row form-handles">
+              <a href="#sign-up" className="text-shadow auth-form-link">Create an Account</a>
+              <div className="form-button">
+                <button className="shadow" type="submit">Sign In</button>
               </div>
             </div>
           </form>
