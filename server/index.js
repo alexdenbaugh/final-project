@@ -22,10 +22,11 @@ const jsonMiddleware = express.json();
 app.use(jsonMiddleware);
 
 app.post('/api/boardGamePosts', (req, res, next) => {
-  let { lender, game, gameId, gameImg, comments, thumbnail, description, minPlayers, maxPlayers, minPlayTime, maxPlayTime, age, year } = req.body;
-  if (!lender || !game || !gameId || !gameImg || !comments || !thumbnail || !description || !minPlayers || !maxPlayers || !minPlayTime || !maxPlayTime || !age || !year) {
-    throw new ClientError(400, 'lender, game, gameId, gameImg, comments, thumbnail, description, minPlayers, maxPlayers, minPlayTime, maxPlayTime, age and year are required fields');
+  let { lender, lenderId, game, gameId, gameImg, comments, thumbnail, description, minPlayers, maxPlayers, minPlayTime, maxPlayTime, age, year } = req.body;
+  if (!lender || !lenderId || !game || !gameId || !gameImg || !comments || !thumbnail || !description || !minPlayers || !maxPlayers || !minPlayTime || !maxPlayTime || !age || !year) {
+    throw new ClientError(400, 'lender, lenderId, game, gameId, gameImg, comments, thumbnail, description, minPlayers, maxPlayers, minPlayTime, maxPlayTime, age and year are required fields');
   }
+  lenderId = parseInt(lenderId, 10);
   gameId = parseInt(gameId, 10);
   minPlayers = parseInt(minPlayers, 10);
   maxPlayers = parseInt(maxPlayers, 10);
@@ -37,11 +38,11 @@ app.post('/api/boardGamePosts', (req, res, next) => {
     insert into "posts" ("lenderName", "gameName", "gameId", "thumbnail",
                      "lenderComments", "image", "description", "minPlayers",
                      "maxPlayers", "minPlayTime", "maxPlayTime", "ageLimit",
-                     "yearPublished")
-    values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+                     "yearPublished", "lenderId")
+    values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
     returning *;
   `;
-  const params = [lender, game, gameId, thumbnail, comments, gameImg, description, minPlayers, maxPlayers, minPlayTime, maxPlayTime, age, year];
+  const params = [lender, game, gameId, thumbnail, comments, gameImg, description, minPlayers, maxPlayers, minPlayTime, maxPlayTime, age, year, lenderId];
   db.query(sql, params)
     .then(result => {
       const [post] = result.rows;
@@ -154,6 +155,7 @@ app.get('/api/boardGamePosts', (req, res, next) => {
   const sql = `
     select "postId",
            "lenderName",
+           "lenderId",
            "gameName",
            "gameId",
            "thumbnail",
@@ -188,6 +190,7 @@ app.get('/api/boardGamePosts/:postId', (req, res, next) => {
   const sql = `
     select "postId",
            "lenderName",
+           "lenderId",
            "gameName",
            "gameId",
            "thumbnail",
@@ -223,6 +226,7 @@ app.get('/api/boardGamePosts/search/:value', (req, res, next) => {
   const sql = `
     select "postId",
            "lenderName",
+           "lenderId",
            "gameName",
            "gameId",
            "thumbnail",
@@ -309,7 +313,28 @@ app.post('/api/auth/sign-in', (req, res, next) => {
     })
     .catch(err => next(err));
 });
-//
+
+app.post('/api/messages', (req, res, next) => {
+  let { senderId, recipientId, content, postId } = req.body;
+  if (!senderId || !recipientId || !content || !postId) {
+    throw new ClientError(400, 'senderId, recipientId, content, postId are required fields');
+  }
+  senderId = parseInt(senderId, 10);
+  recipientId = parseInt(recipientId, 10);
+  postId = parseInt(postId, 10);
+  const sql = `
+    insert into "messages" ("senderId", "recipientId", "content", "postId")
+         values ($1, $2, $3, $4)
+      returning *;
+  `;
+  const params = [senderId, recipientId, content, postId];
+  db.query(sql, params)
+    .then(result => {
+      const [message] = result.rows;
+      res.status(201).send(message);
+    })
+    .catch(err => next(err));
+});
 
 app.use(staticMiddleware);
 app.use(errorMiddleware);
