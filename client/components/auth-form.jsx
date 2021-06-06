@@ -14,7 +14,6 @@ export default class AuthForm extends React.Component {
       errorUser: '',
       errorReq: '',
       errorMatch: ''
-
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleCredentials = this.handleCredentials.bind(this);
@@ -80,7 +79,38 @@ export default class AuthForm extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    // console.log('submit!', event)
+    const { errorUser, errorReq, errorMatch, username, password } = this.state;
+    if (errorUser || errorReq || errorMatch) {
+      this.handleCredentials();
+      return;
+    }
+    const req = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username, password })
+    };
+    fetch('/api/auth/sign-up', req)
+      .then(res => res.json())
+      .then(result => {
+        if (result.error) {
+          this.setState({
+            username: '',
+            password: '',
+            confirmPassword: '',
+            usernameIcon: 'hidden',
+            passwordIcon: 'hidden',
+            confirmPasswordIcon: 'hidden',
+            errorUser: 'Username taken, try another',
+            errorReq: '',
+            errorMatch: ''
+          });
+        } else {
+          // console.log(result)
+          window.location.hash = '#';
+        }
+      });
   }
 
   render() {

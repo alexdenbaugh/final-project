@@ -17,6 +17,7 @@ export default class Posts extends React.Component {
     this.renderView = this.renderView.bind(this);
     this.runSearch = debounce(this.runSearch.bind(this), 500);
     this.renderSearch = this.renderSearch.bind(this);
+    this.renderPostInfo = this.renderPostInfo.bind(this);
   }
 
   componentDidMount() {
@@ -123,84 +124,93 @@ export default class Posts extends React.Component {
         </>
       );
     } else if (this.context.route.path === 'post-info') {
-      const post = this.state.selectedPost;
-      return (
-        <>
-          <div className="row">
-            <div className="col-1 post-info-game shadow">
-              <h1 className="text-shadow orange">{post.gameName}</h1>
-            </div>
-          </div>
-          <div className="row row-2">
-            <div className="col-2 post-info-left">
-              <div className="col-1 image-post">
-                <img className="shadow" src={post.image} alt={post.gameName} />
-              </div>
-              <div className="col-1 post-info-block-container">
-                <div className="post-info-block shadow">
-                  <div className="post-info-block-title">
-                    <h3 className="orange">Players:</h3>
-                  </div>
-                  <div className="post-info-block-value">
-                    <h3 className="lora">{post.minPlayers === post.maxPlayers ? `${post.maxPlayers}` : `${post.minPlayers} - ${post.maxPlayers}`}</h3>
-                  </div>
-                </div>
-                <div className="post-info-block shadow">
-                  <div className="post-info-block-title">
-                    <h3 className="orange">Play Time:</h3>
-                  </div>
-                  <div className="post-info-block-value">
-                    <h3 className="lora">{post.minPlayTime === post.maxPlayTime ? `${post.maxPlayTime} min` : `${post.minPlayTime} - ${post.maxPlayTime} min`}</h3>
-                  </div>
-                </div>
-                <div className="post-info-block shadow">
-                  <div className="post-info-block-title">
-                    <h3 className="orange">Ages:</h3>
-                  </div>
-                  <div className="post-info-block-value">
-                    <h3 className="lora">{`${post.ageLimit}+`}</h3>
-                  </div>
-                </div>
-                <div className="post-info-block shadow">
-                  <div className="post-info-block-title">
-                    <h3 className="orange">Year:</h3>
-                  </div>
-                  <div className="post-info-block-value">
-                    <h3 className="lora">{`${post.yearPublished}`}</h3>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-2 post-info-right">
-              <div className="col-1 post-info-text">
-                <div className="shadow post-info-text-title">
-                  <h3 className="orange">Description:</h3>
-                </div>
-                <div className="col-1 shadow post-info-text-value-long">
-                  <h3 dangerouslySetInnerHTML={{ __html: post.description }} className="lora"></h3>
-                </div>
-              </div>
-              <div className="col-1 post-info-text">
-                <div className="shadow post-info-text-title">
-                  <h3 className="orange">Lender:</h3>
-                </div>
-                <div className="col-1 shadow post-info-text-value">
-                  <h3 className="lora">{ post.lenderName }</h3>
-                </div>
-              </div>
-              <div className="col-1 post-info-text">
-                <div className="shadow post-info-text-title">
-                  <h3 className="orange">Lender&apos;s Comments:</h3>
-                </div>
-                <div className="col-1 shadow post-info-text-value-long">
-                  <h3 className="lora">{ post.lenderComments }</h3>
-                </div>
-              </div>
-            </div>
-          </div>
-        </>
-      );
+      // const post = this.state.selectedPost;
+      // if (!this.state.selectedPost) {
+      //   post = this.props.post
+      // } else {
+      this.renderPostInfo();
+      // }
     }
+  }
+
+  renderPostInfo() {
+    const post = this.state.selectedPost;
+    return (
+      <>
+        <div className="row">
+          <div className="col-1 post-info-game shadow">
+            <h1 className="text-shadow orange">{post.gameName}</h1>
+          </div>
+        </div>
+        <div className="row row-2">
+          <div className="col-2 post-info-left">
+            <div className="col-1 image-post">
+              <img className="shadow" src={post.image} alt={post.gameName} />
+            </div>
+            <div className="col-1 post-info-block-container">
+              <div className="post-info-block shadow">
+                <div className="post-info-block-title">
+                  <h3 className="orange">Players:</h3>
+                </div>
+                <div className="post-info-block-value">
+                  <h3 className="lora">{post.minPlayers === post.maxPlayers ? `${post.maxPlayers}` : `${post.minPlayers} - ${post.maxPlayers}`}</h3>
+                </div>
+              </div>
+              <div className="post-info-block shadow">
+                <div className="post-info-block-title">
+                  <h3 className="orange">Play Time:</h3>
+                </div>
+                <div className="post-info-block-value">
+                  <h3 className="lora">{post.minPlayTime === post.maxPlayTime ? `${post.maxPlayTime} min` : `${post.minPlayTime} - ${post.maxPlayTime} min`}</h3>
+                </div>
+              </div>
+              <div className="post-info-block shadow">
+                <div className="post-info-block-title">
+                  <h3 className="orange">Ages:</h3>
+                </div>
+                <div className="post-info-block-value">
+                  <h3 className="lora">{`${post.ageLimit}+`}</h3>
+                </div>
+              </div>
+              <div className="post-info-block shadow">
+                <div className="post-info-block-title">
+                  <h3 className="orange">Year:</h3>
+                </div>
+                <div className="post-info-block-value">
+                  <h3 className="lora">{`${post.yearPublished}`}</h3>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="col-2 post-info-right">
+            <div className="col-1 post-info-text">
+              <div className="shadow post-info-text-title">
+                <h3 className="orange">Description:</h3>
+              </div>
+              <div className="col-1 shadow post-info-text-value-long">
+                <h3 dangerouslySetInnerHTML={{ __html: post.description }} className="lora"></h3>
+              </div>
+            </div>
+            <div className="col-1 post-info-text">
+              <div className="shadow post-info-text-title">
+                <h3 className="orange">Lender:</h3>
+              </div>
+              <div className="col-1 shadow post-info-text-value">
+                <h3 className="lora">{post.lenderName}</h3>
+              </div>
+            </div>
+            <div className="col-1 post-info-text">
+              <div className="shadow post-info-text-title">
+                <h3 className="orange">Lender&apos;s Comments:</h3>
+              </div>
+              <div className="col-1 shadow post-info-text-value-long">
+                <h3 className="lora">{post.lenderComments}</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      </>
+    );
   }
 
   render() {
@@ -239,7 +249,7 @@ function PostItem(props) {
     postId
   } = props.info;
   return (
-    <a href="#post-info" className="post-item col-2 shadow" onClick={props.showPost} data-postid={postId}>
+    <a href={`#post-info?postId=${postId}`} className="post-item col-2 shadow" onClick={props.showPost} data-postid={postId}>
       <div className="post-item-info" data-postid={postId}>
         <div data-postid={postId}>
           <h3 className="orange shadow post-item-info-title" data-postid={postId}>Title</h3>

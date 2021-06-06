@@ -49,8 +49,12 @@ export default class App extends React.Component {
     if (path === 'create-post' || path === 'create-post-search') {
       return <NewPostForm />;
     }
-    if (path === '' || path === 'posts' || path === 'post-search' || path === 'post-info') {
+    if (path === '' || path === 'posts' || path === 'post-search') {
       return <Posts />;
+    }
+    if (path === 'post-info') {
+      const postId = this.state.route.params.get('postId');
+      return <Posts postId={postId} />;
     }
     if (path === 'sign-up') {
       return <Auth />;
