@@ -125,7 +125,7 @@ export default class NewPostForm extends React.Component {
         <>
           <div className="row">
             <div className="col-4 bookmark title shadow">
-              <h1 className="orange">New Post</h1>
+              <h1 className="text-shadow orange">New Post</h1>
             </div>
           </div>
           <div className="row row-2">
@@ -171,7 +171,7 @@ export default class NewPostForm extends React.Component {
         <>
           <div className="row">
             <div className="col-4 bookmark title shadow">
-              <h1 className="orange">New Post</h1>
+              <h1 className="text-shadow orange">New Post</h1>
             </div>
           </div>
           <div className="row row-2">
@@ -258,7 +258,7 @@ export default class NewPostForm extends React.Component {
         <form onSubmit={this.handlePost} action="#" className="game-search" autoComplete="off" id="new-post-form">
           {this.renderForm()}
           <div className="row form-button">
-            <button className="form-button shadow" type="submit">Post</button>
+            <button className="text-shadow form-button shadow" type="submit">Post</button>
           </div>
         </form>
         <div onSubmit={this.handleSearch} className={`modal-container ${hidden}`}>
