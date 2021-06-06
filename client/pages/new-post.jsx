@@ -1,6 +1,9 @@
 import React from 'react';
 import debounce from '../lib/debounce';
 import DOMPurify from 'dompurify';
+// issue-4
+import Redirect from '../components/redirect';
+//
 
 export default class NewPostForm extends React.Component {
   constructor(props) {
@@ -225,21 +228,21 @@ export default class NewPostForm extends React.Component {
     } else
     if (this.state.searchStatus === 'searching') {
       return (
-        <div className="row search-message">
-          <h3 className="orange">Searching...</h3>
-        </div>
+          <div className="row search-message">
+            <h3 className="orange">Searching...</h3>
+          </div>
       );
     } else if (this.state.searchStatus === 'result') {
       return (
-        <>
-          <SearchList list={this.state.gameList} handleSearch={this.handleSearch} />
-        </>
+          <>
+            <SearchList list={this.state.gameList} handleSearch={this.handleSearch} />
+          </>
       );
     } else if (this.state.searchStatus === 'chosen') {
       return (
-        <div className="row search-message">
-          <h3 className="orange">Loading Game...</h3>
-        </div>
+          <div className="row search-message">
+            <h3 className="orange">Loading Game...</h3>
+          </div>
       );
     } else {
       return <></>;
@@ -247,6 +250,9 @@ export default class NewPostForm extends React.Component {
   }
 
   render() {
+    // issue-4
+    if (!this.context.user) return <Redirect to="sign-in" />;
+    //
     let hidden;
     if (this.state.modalView === 'search') {
       hidden = '';
@@ -271,7 +277,7 @@ export default class NewPostForm extends React.Component {
             </div>
           </div>
           <div className="row row-2">
-            { this.renderSearch() }
+            {this.renderSearch()}
           </div>
         </div>
       </>
@@ -287,7 +293,7 @@ function SearchList(props) {
   });
   return (
     <div className="col-2 search-list shadow">
-      { gameList }
+      { gameList}
     </div>
   );
 }
@@ -295,6 +301,6 @@ function SearchList(props) {
 function GameItem(props) {
   const name = props.value;
   return (
-    <button onClick={props.handleSearch} className="col-1 search-item shadow" data-gameid={props.id}>{ name }</button>
+    <button onClick={props.handleSearch} className="col-1 search-item shadow" data-gameid={props.id}>{name}</button>
   );
 }

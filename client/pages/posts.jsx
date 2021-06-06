@@ -1,6 +1,7 @@
 import React from 'react';
 import AppContext from '../lib/app-context';
 import debounce from '../lib/debounce';
+import Redirect from '../components/redirect';
 
 export default class Posts extends React.Component {
   constructor(props) {
@@ -107,7 +108,7 @@ export default class Posts extends React.Component {
             </div>
           </div>
           <div className="postings-container">
-            { this.renderSearch() }
+            {this.renderSearch()}
           </div>
         </>
       );
@@ -115,9 +116,11 @@ export default class Posts extends React.Component {
   }
 
   render() {
+    if (!this.context.user) return <Redirect to="sign-in" />;
+
     return (
       <>
-        { this.renderView() }
+        { this.renderView()}
       </>
     );
   }
@@ -131,12 +134,12 @@ function PostingList(props) {
   } else {
     const $postList = props.postList.map(post => {
       return (
-        <PostItem key={post.postId} info={post} showPost={props.showPost}/>
+        <PostItem key={post.postId} info={post} showPost={props.showPost} />
       );
     });
     return (
       <div className="row row-2 post-list">
-        { $postList }
+        { $postList}
       </div>
     );
   }
@@ -156,17 +159,17 @@ function PostItem(props) {
           <h3 className="orange shadow post-item-info-title">Title</h3>
         </div>
         <div>
-          <h3 className="shadow lora post-item-info-value">{ game }</h3>
+          <h3 className="shadow lora post-item-info-value">{game}</h3>
         </div>
         <div>
           <h3 className="orange shadow post-item-info-title">Lender</h3>
         </div>
         <div>
-          <h3 className="shadow lora post-item-info-value">{ name }</h3>
+          <h3 className="shadow lora post-item-info-value">{name}</h3>
         </div>
       </div>
       <div className="post-item-img">
-        <img src={image} alt={game} className="shadow"/>
+        <img src={image} alt={game} className="shadow" />
       </div>
     </a>
   );

@@ -1,4 +1,6 @@
 import React from 'react';
+import Redirect from '../components/redirect';
+import AppContext from '../lib/app-context';
 
 export default class PostInfo extends React.Component {
   constructor(props) {
@@ -15,6 +17,7 @@ export default class PostInfo extends React.Component {
   }
 
   render() {
+    if (!this.context.user) return <Redirect to="sign-in" />;
     if (!this.state.post) {
       return null;
     }
@@ -97,3 +100,5 @@ export default class PostInfo extends React.Component {
     );
   }
 }
+
+PostInfo.contextType = AppContext;
