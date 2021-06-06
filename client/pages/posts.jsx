@@ -149,7 +149,7 @@ function PostItem(props) {
     postId
   } = props.info;
   return (
-    <a href={`#post-info?postId=${postId}`} className="post-item col-2 shadow">
+    <a href={`#post-info?postId=${postId}`} className="post-item shadow">
       <div className="post-item-info">
         <div>
           <h3 className="orange shadow post-item-info-title">Title</h3>

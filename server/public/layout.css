@@ -143,8 +143,8 @@ label {
     padding-right: 20px;
   }
 
-  div.post-item {
-    width: 45%;
+  a.post-item {
+    width: 48%;
   }
 
   .post-list {

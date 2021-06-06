@@ -148,7 +148,8 @@ button.user-menu {
 }
 
 button.user-menu:hover,
-button.close-menu:hover {
+button.close-menu:hover,
+button.user-menu-open:hover {
   border: #233d4d 3px solid;
 }
 

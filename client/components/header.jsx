@@ -4,7 +4,6 @@ import AppContext from '../lib/app-context';
 export default class Header extends React.Component {
 
   render() {
-    const { path } = this.context.route;
     return (
       <>
         <header className="shadow">
@@ -32,7 +31,7 @@ export default class Header extends React.Component {
               </div>
             </div>
             <div onClick={this.context.handleHeader} className="header-icon" data-view="user-menu">
-              <a href={`#${path}`} onClick={this.context.handleHeader} className="text-shadow" data-view="user-menu"><i onClick={this.context.handleHeader} data-view="user-menu" className="fas fa-user"></i></a>
+              <button onClick={this.context.handleHeader} className="text-shadow user-menu-open" data-view="user-menu"><i onClick={this.context.handleHeader} data-view="user-menu" className="fas fa-user"></i></button>
             </div>
           </div>
         </header>
