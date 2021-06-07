@@ -29,6 +29,13 @@ export default class Messages extends React.Component {
   renderView() {
     const { userId } = this.context.user;
     const { messages } = this.state;
+    if (messages.length === 0) {
+      return (
+        <div className="row no-messages">
+          <h2>You have no messages.</h2>
+        </div>
+      );
+    }
     return (
       <MessageList messageList={GroupMessages(messages, userId)} userId={userId} />
     );
@@ -79,16 +86,20 @@ function MessageItem(props) {
       senderName,
       lenderName,
       content,
+      recipientId,
       createdAt
     },
     userId
   } = props;
+  const otherId = userId === senderId
+    ? recipientId
+    : senderId;
   createdAt = formatDate(createdAt);
   if (content.length > 20) {
     content = `${content.slice(0, 20)}...`;
   }
   return (
-    <a href="#messages" className="message-list-item shadow">
+    <a href={`#convo?id=${otherId}`} className="message-list-item shadow">
       <div className="message-list-item-text">
         <div className="message-list-item-name">
           <h3 className=" text-shadow lora">

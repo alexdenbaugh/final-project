@@ -367,6 +367,38 @@ app.get('/api/messages/:userId', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.get('/api/message/convo/:userId/:otherId', (req, res, next) => {
+  let { userId, otherId } = req.params;
+  userId = parseInt(userId, 10);
+  otherId = parseInt(otherId, 10);
+  if (!userId || !otherId) {
+    throw new ClientError(400, 'Ids are required.');
+  } else if (!Number.isInteger(userId) || userId <= 0 || !Number.isInteger(otherId) || otherId <= 0) {
+    throw new ClientError(400, 'Id must be a positive integer.');
+  }
+  const sql = `
+    select  "m"."messageId" as "messageId",
+            "m"."senderId" as "senderId",
+            "m"."senderName" as "senderName",
+            "m"."recipientId" as "recipientId",
+            "m"."content" as "content",
+            "m"."postId" as "postId",
+            "m"."createdAt" as "createdAt",
+            "p"."lenderName" as "lenderName"
+       from "messages" as "m"
+       join "posts" as "p" using ("postId")
+      where ("senderId" = $1 and "recipientId" = $2) or ("senderId" = $2 and "recipientId" = $1)
+   order by "createdAt";
+  `;
+  const params = [userId, otherId];
+  db.query(sql, params)
+    .then(result => {
+      const messages = result.rows;
+      res.status(200).send(messages);
+    })
+    .catch(err => next(err));
+});
+
 app.use(staticMiddleware);
 app.use(errorMiddleware);
 

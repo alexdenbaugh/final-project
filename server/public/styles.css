@@ -696,6 +696,12 @@ div.form-button,
   border-color: #fd910d;
 }
 
+.no-messages {
+  text-align: center;
+  margin: 50px 0;
+  color: #dc2626;
+}
+
 .home-container {
   background-color: #233d4d;
   color: #fd910d;
