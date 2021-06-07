@@ -355,7 +355,8 @@ app.get('/api/messages/:userId', (req, res, next) => {
             "p"."lenderName" as "lenderName"
        from "messages" as "m"
        join "posts" as "p" using ("postId")
-      where "senderId" = $1 or "recipientId" = $2;
+      where "senderId" = $1 or "recipientId" = $2
+   order by "createdAt" desc;
   `;
   const params = [userId, userId];
   db.query(sql, params)

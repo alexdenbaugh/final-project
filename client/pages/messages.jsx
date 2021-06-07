@@ -1,6 +1,8 @@
 import React from 'react';
 import AppContext from '../lib/app-context';
 import GroupMessages from '../lib/group-messages';
+import formatDate from '../lib/format-date';
+import Redirect from '../components/redirect';
 
 export default class Messages extends React.Component {
   constructor(props) {
@@ -25,22 +27,26 @@ export default class Messages extends React.Component {
   }
 
   renderView() {
-
+    const { userId } = this.context.user;
+    const { messages } = this.state;
     return (
-      <div className="message-list-container">
-        <MessageList messageList={GroupMessages(this.state.messages)} userId={this.context.user.userId} />
-      </div>
+      <MessageList messageList={GroupMessages(messages, userId)} userId={userId} />
     );
   }
 
   render() {
+    if (!this.context.user) return <Redirect to="sign-in" />;
     const { messages } = this.state;
-    // console.log('messages in render', messages)
     if (!messages) {
       return null;
     }
     return (
       <>
+        <div className="row messages-title">
+          <div className="col-4 bookmark title shadow">
+            <h1 className="text-shadow orange">Messages</h1>
+          </div>
+        </div>
         {this.renderView()}
       </>
     );
@@ -50,17 +56,16 @@ export default class Messages extends React.Component {
 Messages.contextType = AppContext;
 
 function MessageList(props) {
-  // console.log('Listing', props)
   if (props.messageList.length < 1) {
     return (<></>);
   } else {
     const $messageList = props.messageList.map(message => {
       return (
-        <MessageItem key={message.messageId} info={message} user={props.userId} />
+        <MessageItem key={message[0].messageId} info={message[0]} userId={props.userId} />
       );
     });
     return (
-      <div className="row row-2 post-list">
+      <div className="message-list-container shadow">
         { $messageList}
       </div>
     );
@@ -68,23 +73,25 @@ function MessageList(props) {
 }
 
 function MessageItem(props) {
-  const {
+  let {
     info: {
       senderId,
       senderName,
-      // recipientId,
       lenderName,
       content,
-      // postId,
       createdAt
     },
     userId
   } = props;
+  createdAt = formatDate(createdAt);
+  if (content.length > 20) {
+    content = `${content.slice(0, 20)}...`;
+  }
   return (
     <a href="#messages" className="message-list-item shadow">
-      <div>
-        <div>
-          <h3 className="lora">
+      <div className="message-list-item-text">
+        <div className="message-list-item-name">
+          <h3 className=" text-shadow lora">
             {
               userId === senderId
                 ? lenderName
@@ -92,15 +99,17 @@ function MessageItem(props) {
             }
           </h3>
         </div>
-        <div>
+        <div className="message-list-item-note">
           <span className="lora">{content}</span>
         </div>
       </div>
-      <div>
-        <h3 className="lora">{createdAt}</h3>
-      </div>
-      <div>
-        <i className="fas fa-chevron-right"></i>
+      <div className="message-list-item-di">
+        <div className="message-list-item-date">
+          <h3 className="lora">{createdAt}</h3>
+        </div>
+        <div className="message-list-item-icon">
+          <i className="text-shadow fas fa-chevron-right"></i>
+        </div>
       </div>
     </a>
   );

@@ -23,6 +23,19 @@ export default class NavBarModal extends React.Component {
     if (modal === 'burger-menu') {
       return (
         <>
+          <a href="#" className={`shadow text-shadow ${modal}-item`}>
+            <div className="menu-item-type">
+              <div className="menu-item-icon">
+                <i className="fab fa-phoenix-framework"></i>
+              </div>
+              <div className="menu-item-text">
+                <h3>Home</h3>
+              </div>
+            </div>
+            <div className="menu-item-arrow">
+              <i className="fas fa-chevron-right"></i>
+            </div>
+          </a>
           <a href="#posts" className={`shadow text-shadow ${modal}-item`}>
             <div className="menu-item-type">
               <div className="menu-item-icon">
