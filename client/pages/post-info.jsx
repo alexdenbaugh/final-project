@@ -95,6 +95,9 @@ export default class PostInfo extends React.Component {
               </div>
             </div>
           </div>
+          <div className="row post-info-button">
+            <button className="shadow text-shadow" onClick={this.context.handleMessage} >Message Lender</button>
+          </div>
         </div>
       </>
     );

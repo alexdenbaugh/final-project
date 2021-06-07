@@ -250,9 +250,7 @@ export default class NewPostForm extends React.Component {
   }
 
   render() {
-    // issue-4
     if (!this.context.user) return <Redirect to="sign-in" />;
-    //
     let hidden;
     if (this.state.modalView === 'search') {
       hidden = '';
