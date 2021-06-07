@@ -345,7 +345,8 @@ app.get('/api/messages/:userId', (req, res, next) => {
     throw new ClientError(400, 'userId must be a positive integer.');
   }
   const sql = `
-    select  "m"."senderId" as "senderId",
+    select  "m"."messageId" as "messageId",
+            "m"."senderId" as "senderId",
             "m"."senderName" as "senderName",
             "m"."recipientId" as "recipientId",
             "m"."content" as "content",
