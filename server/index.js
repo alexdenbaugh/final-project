@@ -315,23 +315,52 @@ app.post('/api/auth/sign-in', (req, res, next) => {
 });
 
 app.post('/api/messages', (req, res, next) => {
-  let { senderId, recipientId, content, postId } = req.body;
-  if (!senderId || !recipientId || !content || !postId) {
-    throw new ClientError(400, 'senderId, recipientId, content, postId are required fields');
+  let { senderId, senderName, recipientId, content, postId } = req.body;
+  if (!senderId || !senderName || !recipientId || !content || !postId) {
+    throw new ClientError(400, 'senderId, senderName, recipientId, content, postId are required fields');
   }
   senderId = parseInt(senderId, 10);
   recipientId = parseInt(recipientId, 10);
   postId = parseInt(postId, 10);
   const sql = `
-    insert into "messages" ("senderId", "recipientId", "content", "postId")
-         values ($1, $2, $3, $4)
+    insert into "messages" ("senderId", "senderName", "recipientId", "content", "postId")
+         values ($1, $2, $3, $4, $5)
       returning *;
   `;
-  const params = [senderId, recipientId, content, postId];
+  const params = [senderId, senderName, recipientId, content, postId];
   db.query(sql, params)
     .then(result => {
       const [message] = result.rows;
       res.status(201).send(message);
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/messages/:userId', (req, res, next) => {
+  let { userId } = req.params;
+  userId = parseInt(userId, 10);
+  if (!userId) {
+    throw new ClientError(400, 'userId is a required field.');
+  } else if (!Number.isInteger(userId) || userId <= 0) {
+    throw new ClientError(400, 'userId must be a positive integer.');
+  }
+  const sql = `
+    select  "m"."senderId" as "senderId",
+            "m"."senderName" as "senderName",
+            "m"."recipientId" as "recipientId",
+            "m"."content" as "content",
+            "m"."postId" as "postId",
+            "m"."createdAt" as "createdAt",
+            "p"."lenderName" as "lenderName"
+       from "messages" as "m"
+       join "posts" as "p" using ("postId")
+      where "senderId" = $1 or "recipientId" = $2;
+  `;
+  const params = [userId, userId];
+  db.query(sql, params)
+    .then(result => {
+      const messages = result.rows;
+      res.status(200).send(messages);
     })
     .catch(err => next(err));
 });

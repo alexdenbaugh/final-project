@@ -525,6 +525,10 @@ div.form-button,
   border-color: black;
 }
 
+.new-message-buttons button:hover {
+  border-color: #fd910d;
+}
+
 .cancel-button {
   background-color: #dc2626;
   color: white;

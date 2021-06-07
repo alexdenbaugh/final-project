@@ -61,7 +61,7 @@ export default class NavBarModal extends React.Component {
       );
     } else if (modal === 'new-message') {
       return (
-        <NewMessage userId={this.context.user.userId} postId={this.context.route.params.get('postId')} handleHeader={this.context.handleHeader} />
+        <NewMessage user={this.context.user} postId={this.context.route.params.get('postId')} handleHeader={this.context.handleHeader} />
       );
     }
   }
