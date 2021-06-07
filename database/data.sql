@@ -21,8 +21,8 @@ insert into "users" ("username", "hashedPassword")
             ('rLupin', '$argon2i$v=19$m=4096,t=3,p=1$h7icQD/xZr8akZsX+hNA0A$h68atJWyjvunAwNOpSpMfg9sPvoMQ6dKwoh0dJhurWA'),
             ('uncleSam', '$argon2i$v=19$m=4096,t=3,p=1$h7icQD/xZr8akZsX+hNA0A$h68atJWyjvunAwNOpSpMfg9sPvoMQ6dKwoh0dJhurWA');
 
-insert into "messages" ("senderId", "recipientId", "content", "postId")
-values (4, 1, 'Hey there Garret Taylor', 1),
-       (4, 2, 'Hey there Steve Rodgers!', 2),
-       (4, 3, 'Hey there Remus Lupin!', 3),
-       (1, 3, 'Hey Remus!', 3);
+insert into "messages" ("senderId", "recipientId", "content", "senderName", "postId")
+values (4, 1, 'Hey there Garret Taylor', 'uncleSam', 1),
+       (4, 2, 'Hey there Steve Rodgers!', 'uncleSam', 2),
+       (4, 3, 'Hey there Remus Lupin!', 'uncleSam', 3),
+       (1, 3, 'Hey Remus!', 'gTaylor', 3);

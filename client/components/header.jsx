@@ -41,6 +41,9 @@ export default class Header extends React.Component {
               <div className="header-link">
                 <a href="#create-post" className="text-shadow">Make a Post</a>
               </div>
+              <div className="header-link">
+                <a href="#messages" className="text-shadow">Messages</a>
+              </div>
             </div>
             {
               user

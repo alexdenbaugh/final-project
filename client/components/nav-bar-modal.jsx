@@ -23,6 +23,19 @@ export default class NavBarModal extends React.Component {
     if (modal === 'burger-menu') {
       return (
         <>
+          <a href="#" className={`shadow text-shadow ${modal}-item`}>
+            <div className="menu-item-type">
+              <div className="menu-item-icon">
+                <i className="fab fa-phoenix-framework"></i>
+              </div>
+              <div className="menu-item-text">
+                <h3>Home</h3>
+              </div>
+            </div>
+            <div className="menu-item-arrow">
+              <i className="fas fa-chevron-right"></i>
+            </div>
+          </a>
           <a href="#posts" className={`shadow text-shadow ${modal}-item`}>
             <div className="menu-item-type">
               <div className="menu-item-icon">
@@ -49,6 +62,19 @@ export default class NavBarModal extends React.Component {
               <i data-view="new-post" className="fas fa-chevron-right"></i>
             </div>
           </a>
+          <a href="#messages" onClick={this.handleClick} className="shadow text-shadow burger-menu-item">
+            <div className="menu-item-type">
+              <div className="menu-item-icon">
+                <i className="fas fa-comments"></i>
+              </div>
+              <div className="menu-item-text">
+                <h3>Messages</h3>
+              </div>
+            </div>
+            <div data-view="new-post" className="menu-item-arrow">
+              <i data-view="new-post" className="fas fa-chevron-right"></i>
+            </div>
+          </a>
         </>
       );
     } else if (modal === 'user-menu' && this.context.user) {
@@ -61,7 +87,7 @@ export default class NavBarModal extends React.Component {
       );
     } else if (modal === 'new-message') {
       return (
-        <NewMessage userId={this.context.user.userId} postId={this.context.route.params.get('postId')} handleHeader={this.context.handleHeader} />
+        <NewMessage user={this.context.user} postId={this.context.route.params.get('postId')} handleHeader={this.context.handleHeader} />
       );
     }
   }

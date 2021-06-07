@@ -38,6 +38,7 @@ create table "users" (
 create table "messages" (
   "messageId"   serial,
   "senderId"    integer        not null,
+  "senderName"  text           not null,
   "recipientId" integer        not null,
   "content"     text           not null,
   "postId"      integer        not null,

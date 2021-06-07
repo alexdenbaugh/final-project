@@ -26,11 +26,12 @@ export default class NewMessage extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     const { message, post } = this.state;
-    const { postId, userId } = this.props;
+    const { postId, user: { userId, username } } = this.props;
     const header = new Headers();
     header.append('Content-Type', 'application/json');
     let body = {
       senderId: userId,
+      senderName: username,
       recipientId: post.lenderId,
       content: message,
       postId
