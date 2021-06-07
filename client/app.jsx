@@ -26,6 +26,7 @@ export default class App extends React.Component {
     this.renderPage = this.renderPage.bind(this);
     this.handleSignIn = this.handleSignIn.bind(this);
     this.handleSignOut = this.handleSignOut.bind(this);
+    this.handleMessage = this.handleMessage.bind(this);
   }
 
   componentDidMount() {
@@ -56,13 +57,21 @@ export default class App extends React.Component {
   }
 
   handleHeader(event) {
-    if (event.target.dataset.view === 'burger-menu') {
+    if (!event) {
+      this.setState({ modal: 'hidden' });
+    } else if (event.target.dataset.view === 'burger-menu') {
       this.setState({ modal: 'burger-menu' });
     } else if (event.target.dataset.view === 'user-menu') {
       this.setState({ modal: 'user-menu' });
+    } else if (event.target.dataset.view === 'new-message') {
+      this.setState({ modal: 'new-message' });
     } else {
       this.setState({ modal: 'hidden' });
     }
+  }
+
+  handleMessage() {
+    this.setState({ modal: 'new-message' });
   }
 
   renderPage() {
@@ -90,8 +99,8 @@ export default class App extends React.Component {
       return null;
     }
     const { bgColor, route, modal, user } = this.state;
-    const { handleHeader, handleSignIn, handleSignOut } = this;
-    const contextValue = { bgColor, route, modal, handleHeader, user, handleSignIn, handleSignOut };
+    const { handleHeader, handleSignIn, handleSignOut, handleMessage } = this;
+    const contextValue = { bgColor, route, modal, handleHeader, user, handleSignIn, handleSignOut, handleMessage };
     return (
       <AppContext.Provider value={contextValue}>
         <Header />

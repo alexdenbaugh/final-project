@@ -1,5 +1,6 @@
 import React from 'react';
 import AppContext from '../lib/app-context';
+import NewMessage from './new-message';
 
 export default class NavBarModal extends React.Component {
   constructor(props) {
@@ -58,6 +59,10 @@ export default class NavBarModal extends React.Component {
       return (
         <a href="#sign-in" className={`shadow text-shadow ${modal}-item`}><h3>{userLink}</h3></a>
       );
+    } else if (modal === 'new-message') {
+      return (
+        <NewMessage userId={this.context.user.userId} postId={this.context.route.params.get('postId')} handleHeader={this.context.handleHeader} />
+      );
     }
   }
 
@@ -66,21 +71,30 @@ export default class NavBarModal extends React.Component {
     const hidden = modal === 'hidden'
       ? 'hidden'
       : '';
-    return (
-      <div onClick={handleHeader} className={`${hidden} ${modal}-nav-modal-container`}>
-        <div className={`${modal}-container`}>
-          <div className={`shadow ${modal}-head`}>
-            {modal === 'burger-menu'
-              ? <button onClick={handleHeader} className="text-shadow close-menu"><i className="fas fa-times"></i></button>
-              : <button onClick={handleHeader} className="text-shadow user-menu"><i className="fas fa-user"></i></button>
-            }
-          </div>
-          <div className="menu-options">
-            {this.renderMenu()}
+
+    if (modal === 'new-message') {
+      return (
+        <div onClick={handleHeader} className={`${hidden} new-message-modal-container`}>
+          {this.renderMenu()}
+        </div>
+      );
+    } else {
+      return (
+        <div onClick={handleHeader} className={`${hidden} ${modal}-nav-modal-container`}>
+          <div className={`${modal}-container`}>
+            <div className={`shadow ${modal}-head`}>
+              {modal === 'burger-menu'
+                ? <button onClick={handleHeader} className="text-shadow close-menu"><i className="fas fa-times"></i></button>
+                : <button onClick={handleHeader} className="text-shadow user-menu"><i className="fas fa-user"></i></button>
+              }
+            </div>
+            <div className="menu-options">
+              {this.renderMenu()}
+            </div>
           </div>
         </div>
-      </div>
-    );
+      );
+    }
   }
 }
 

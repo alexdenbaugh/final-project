@@ -1,9 +1,8 @@
 import React from 'react';
 import debounce from '../lib/debounce';
 import DOMPurify from 'dompurify';
-// issue-4
 import Redirect from '../components/redirect';
-//
+import AppContext from '../lib/app-context';
 
 export default class NewPostForm extends React.Component {
   constructor(props) {
@@ -101,7 +100,8 @@ export default class NewPostForm extends React.Component {
       minPlayTime: this.state.chosenGame.minPlayTime,
       maxPlayTime: this.state.chosenGame.maxPlayTime,
       age: this.state.chosenGame.age,
-      year: this.state.chosenGame.yearPublished
+      year: this.state.chosenGame.yearPublished,
+      lenderId: this.context.user.userId
     };
     body = JSON.stringify(body);
     const init = {
@@ -250,9 +250,7 @@ export default class NewPostForm extends React.Component {
   }
 
   render() {
-    // issue-4
     if (!this.context.user) return <Redirect to="sign-in" />;
-    //
     let hidden;
     if (this.state.modalView === 'search') {
       hidden = '';
@@ -304,3 +302,5 @@ function GameItem(props) {
     <button onClick={props.handleSearch} className="col-1 search-item shadow" data-gameid={props.id}>{name}</button>
   );
 }
+
+NewPostForm.contextType = AppContext;
