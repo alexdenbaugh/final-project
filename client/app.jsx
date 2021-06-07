@@ -9,6 +9,7 @@ import NavBarModal from './components/nav-bar-modal';
 import parseRoute from './lib/parse-route';
 import Auth from './pages/auth';
 import Home from './pages/home';
+import Messages from './pages/messages';
 import decodeToken from './lib/decode-token';
 
 export default class App extends React.Component {
@@ -88,6 +89,9 @@ export default class App extends React.Component {
     }
     if (path === 'sign-up' || path === 'sign-in') {
       return <Auth />;
+    }
+    if (path === 'messages') {
+      return <Messages />;
     }
     if (path === '') {
       return <Home />;

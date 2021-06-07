@@ -104,7 +104,7 @@ export default class Posts extends React.Component {
               <div className="search-icon">
                 <label htmlFor="search-bar-search-view"><i className="orange fas fa-search"></i></label>
               </div>
-              <input autoComplete="off" onKeyUp={this.handleType} type="text" className="lora" id="search-bar-search-view" placeholder="Search for a game..." />
+              <input autoFocus autoComplete="off" onKeyUp={this.handleType} type="text" className="lora" id="search-bar-search-view" placeholder="Search for a game..." />
             </div>
           </div>
           <div className="postings-container">

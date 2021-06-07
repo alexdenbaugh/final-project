@@ -49,6 +49,19 @@ export default class NavBarModal extends React.Component {
               <i data-view="new-post" className="fas fa-chevron-right"></i>
             </div>
           </a>
+          <a href="#messages" onClick={this.handleClick} className="shadow text-shadow burger-menu-item">
+            <div className="menu-item-type">
+              <div className="menu-item-icon">
+                <i className="fas fa-comments"></i>
+              </div>
+              <div className="menu-item-text">
+                <h3>Messages</h3>
+              </div>
+            </div>
+            <div data-view="new-post" className="menu-item-arrow">
+              <i data-view="new-post" className="fas fa-chevron-right"></i>
+            </div>
+          </a>
         </>
       );
     } else if (modal === 'user-menu' && this.context.user) {
