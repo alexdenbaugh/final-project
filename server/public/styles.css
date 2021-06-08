@@ -728,6 +728,109 @@ div.form-button,
     0 16px 16px rgba(0, 0, 0, 0.05);
 }
 
+.convo-header {
+  max-width: 500px;
+  margin: 20px auto;
+  text-align: center;
+  background-color: #233d4d;
+  border-top: #fd910d 5px solid;
+  border-bottom: #fd910d 5px solid;
+}
+
+.convo-header h2 {
+  margin: 10px auto;
+}
+
+.conversation-container {
+  max-width: 500px;
+  margin: 0 auto;
+  border-radius: 10px;
+  border: #233d4d 5px solid;
+  background-color: white;
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+.convo-list-container {
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: fit-content;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+.conversation-write-container {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  height: fit-content;
+}
+
+.convo-input {
+  border-radius: 10px;
+  padding: 2px;
+  width: 90%;
+  display: flex;
+  background-color: #233d4d;
+  align-items: center;
+  margin: 5px;
+}
+
+#convo-message-input {
+  width: 100%;
+  font-size: 15px;
+}
+
+.send-message-button {
+  padding: 5px;
+}
+
+.send-message-button:hover {
+  border: #233d4d 3px solid;
+  color: #ffa02c;
+}
+
+.recipient-txt {
+  background-color: #d6e4c8;
+  color: black;
+  padding: 8px;
+  border-radius: 10px;
+  margin: 5px auto 5px 0;
+  max-width: 45%;
+}
+
+.sender-txt {
+  background-color: #233d4d;
+  color: white;
+  padding: 8px;
+  border-radius: 10px;
+  margin: 5px 0 5px auto;
+  max-width: 45%;
+  display: flex;
+  justify-content: end;
+}
+
+.time-stamp-row {
+  margin: 2px;
+  text-align: center;
+}
+
+.time-stamp {
+  font-size: 10px;
+  font-weight: 600;
+  margin: auto;
+}
+
+span.sender,
+span.recipient {
+  margin: 0 auto;
+}
+
 .hidden {
   display: none;
 }
