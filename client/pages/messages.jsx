@@ -87,6 +87,7 @@ function MessageItem(props) {
       lenderName,
       content,
       recipientId,
+      postId,
       createdAt
     },
     userId
@@ -99,7 +100,7 @@ function MessageItem(props) {
     content = `${content.slice(0, 20)}...`;
   }
   return (
-    <a href={`#convo?id=${otherId}`} className="message-list-item shadow">
+    <a href={`#convo?id=${otherId}?post=${postId}`} className="message-list-item shadow">
       <div className="message-list-item-text">
         <div className="message-list-item-name">
           <h3 className=" text-shadow lora">

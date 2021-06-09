@@ -12,9 +12,10 @@ export default class Conversation extends React.Component {
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleSend = this.handleSend.bind(this);
+    this.refresh = this.refresh.bind(this);
   }
 
-  componentDidMount() {
+  refresh() {
     const { otherId } = this.props;
     const { userId } = this.context.user;
     fetch(`/api/message/convo/${userId}/${otherId}`)
@@ -29,35 +30,38 @@ export default class Conversation extends React.Component {
 
   handleSend(event) {
     event.preventDefault();
-    // const { messages, currentMessage } = this.state;
-    // const { otherId } = this.props;
-    // const { userId, username } = this.props
-    // const header = new Headers();
-    // header.append('Content-Type', 'application/json');
-    // let body = {
-    //   senderId: userId,
-    //   senderName: username,
-    //   recipientId: otherId,
-    //   content: currentMessage,
-    //   postId
-    // };
-    // body = JSON.stringify(body);
-    // const init = {
-    //   method: 'POST',
-    //   headers: header,
-    //   body: body
-    // };
-    // fetch('/api/messages', init)
-    //   .then(response => response.json())
-    //   .then(message => {
-    //     this.setState({ currentMessage: null,  });
-    //   });
+    if (!this.state.currentMessage) {
+      return null;
+    }
+    const { currentMessage } = this.state;
+    const { otherId, postId } = this.props;
+    const { username, userId } = this.context.user;
+    const header = new Headers();
+    header.append('Content-Type', 'application/json');
+    let body = {
+      senderId: userId,
+      senderName: username,
+      recipientId: otherId,
+      content: currentMessage,
+      postId
+    };
+    body = JSON.stringify(body);
+    const init = {
+      method: 'POST',
+      headers: header,
+      body: body
+    };
+    fetch('/api/messages', init)
+      .then(response => response.json())
+      .then(message => {
+        this.setState({ currentMessage: '' }, this.refresh);
+      });
   }
 
   renderView() {
     const { userId } = this.context.user;
     const { messages } = this.state;
-    if (messages.length === 0) {
+    if (!messages) {
       return (
         <div className="row no-messages">
           <h2>You have no messages.</h2>
@@ -83,6 +87,7 @@ export default class Conversation extends React.Component {
   render() {
     if (!this.context.user) return <Redirect to="sign-in" />;
     if (!this.state.messages) {
+      this.refresh();
       return null;
     }
     const { messages } = this.state;

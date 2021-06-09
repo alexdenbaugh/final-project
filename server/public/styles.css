@@ -831,6 +831,11 @@ span.recipient {
   margin: 0 auto;
 }
 
+.home-phoenix-logo {
+  font-weight: 500;
+  font-size: 50px;
+}
+
 .hidden {
   display: none;
 }
