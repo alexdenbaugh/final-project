@@ -7,15 +7,28 @@ export default class NewMessage extends React.Component {
       post: null,
       message: ''
     };
+    this.requests = new Set();
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
   componentDidMount() {
     const { postId } = this.props;
+    const requestController = new AbortController();
+    this.requests.add(requestController);
+    const { signal } = requestController;
     fetch(`/api/boardGamePosts/${postId}`)
       .then(response => response.json())
-      .then(post => this.setState({ post }));
+      .then(post => {
+        if (signal.aborted) return;
+        this.setState({ post });
+      })
+      .catch(() => { })
+      .finally(() => this.requests.delete(requestController));
+  }
+
+  componentWillUnmount() {
+    this.requests.forEach(req => req.abort());
   }
 
   handleChange(event) {
@@ -26,11 +39,15 @@ export default class NewMessage extends React.Component {
   handleSubmit(event) {
     event.preventDefault();
     const { message, post } = this.state;
-    const { postId, user: { userId, username } } = this.props;
+    const { postId, user: { username } } = this.props;
+    const token = window.localStorage.getItem('phoenix-games-jwt');
+    const requestController = new AbortController();
+    this.requests.add(requestController);
+    const { signal } = requestController;
     const header = new Headers();
     header.append('Content-Type', 'application/json');
+    header.append('phoenix-games-jwt', token);
     let body = {
-      senderId: userId,
       senderName: username,
       recipientId: post.lenderId,
       content: message,
@@ -40,13 +57,17 @@ export default class NewMessage extends React.Component {
     const init = {
       method: 'POST',
       headers: header,
-      body: body
+      body: body,
+      signal
     };
     fetch('/api/messages', init)
       .then(response => response.json())
       .then(message => {
+        if (signal.aborted) return;
         this.setState({ post: null }, this.props.handleHeader);
-      });
+      })
+      .catch(() => { })
+      .finally(() => this.requests.delete(requestController));
   }
 
   render() {

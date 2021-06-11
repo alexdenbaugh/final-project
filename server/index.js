@@ -1,13 +1,14 @@
 require('dotenv/config');
+const pg = require('pg');
+const argon2 = require('argon2');
+const xml2js = require('xml2js');
 const express = require('express');
+const jwt = require('jsonwebtoken');
+const fetch = require('node-fetch');
+const ClientError = require('./client-error');
 const errorMiddleware = require('./error-middleware');
 const staticMiddleware = require('./static-middleware');
-const ClientError = require('./client-error');
-const pg = require('pg');
-const fetch = require('node-fetch');
-const xml2js = require('xml2js');
-const argon2 = require('argon2');
-const jwt = require('jsonwebtoken');
+const authorizationMiddleware = require('./authorization-middleware');
 
 const app = express();
 
@@ -314,12 +315,16 @@ app.post('/api/auth/sign-in', (req, res, next) => {
     .catch(err => next(err));
 });
 
+app.use(authorizationMiddleware);
+
+/* Requires a token */
+
 app.post('/api/messages', (req, res, next) => {
-  let { senderId, senderName, recipientId, content, postId } = req.body;
-  if (!senderId || !senderName || !recipientId || !content || !postId) {
-    throw new ClientError(400, 'senderId, senderName, recipientId, content, postId are required fields');
+  const { userId } = req.user;
+  let { senderName, recipientId, content, postId } = req.body;
+  if (!senderName || !recipientId || !content || !postId) {
+    throw new ClientError(400, 'senderName, recipientId, content, postId are required fields');
   }
-  senderId = parseInt(senderId, 10);
   recipientId = parseInt(recipientId, 10);
   postId = parseInt(postId, 10);
   const sql = `
@@ -327,7 +332,7 @@ app.post('/api/messages', (req, res, next) => {
          values ($1, $2, $3, $4, $5)
       returning *;
   `;
-  const params = [senderId, senderName, recipientId, content, postId];
+  const params = [userId, senderName, recipientId, content, postId];
   db.query(sql, params)
     .then(result => {
       const [message] = result.rows;
@@ -336,14 +341,8 @@ app.post('/api/messages', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.get('/api/messages/:userId', (req, res, next) => {
-  let { userId } = req.params;
-  userId = parseInt(userId, 10);
-  if (!userId) {
-    throw new ClientError(400, 'userId is a required field.');
-  } else if (!Number.isInteger(userId) || userId <= 0) {
-    throw new ClientError(400, 'userId must be a positive integer.');
-  }
+app.get('/api/messages', (req, res, next) => {
+  const { userId } = req.user;
   const sql = `
     select  "m"."messageId" as "messageId",
             "m"."senderId" as "senderId",
@@ -359,6 +358,38 @@ app.get('/api/messages/:userId', (req, res, next) => {
    order by "createdAt" desc;
   `;
   const params = [userId, userId];
+  db.query(sql, params)
+    .then(result => {
+      const messages = result.rows;
+      res.status(200).send(messages);
+    })
+    .catch(err => next(err));
+});
+
+app.get('/api/message/convo/:otherId', (req, res, next) => {
+  const { userId } = req.user;
+  let { otherId } = req.params;
+  otherId = parseInt(otherId, 10);
+  if (!otherId) {
+    throw new ClientError(400, 'Id is required');
+  } else if (!Number.isInteger(otherId) || otherId <= 0) {
+    throw new ClientError(400, 'Id must be a positive integer.');
+  }
+  const sql = `
+    select  "m"."messageId" as "messageId",
+            "m"."senderId" as "senderId",
+            "m"."senderName" as "senderName",
+            "m"."recipientId" as "recipientId",
+            "m"."content" as "content",
+            "m"."postId" as "postId",
+            "m"."createdAt" as "createdAt",
+            "p"."lenderName" as "lenderName"
+       from "messages" as "m"
+       join "posts" as "p" using ("postId")
+      where ("senderId" = $1 and "recipientId" = $2) or ("senderId" = $2 and "recipientId" = $1)
+   order by "createdAt";
+  `;
+  const params = [userId, otherId];
   db.query(sql, params)
     .then(result => {
       const messages = result.rows;

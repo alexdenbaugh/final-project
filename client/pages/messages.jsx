@@ -11,24 +11,45 @@ export default class Messages extends React.Component {
       messages: null
     };
     this.renderView = this.renderView.bind(this);
+    this.requests = new Set();
   }
 
   componentDidMount() {
-    const { userId } = this.context.user;
-    if (!userId) {
-      return null;
-    } else {
-      fetch(`/api/messages/${userId}`)
-        .then(response => response.json())
-        .then(messages => {
-          this.setState({ messages });
-        });
-    }
+    const token = window.localStorage.getItem('phoenix-games-jwt');
+    const requestController = new AbortController();
+    this.requests.add(requestController);
+    const { signal } = requestController;
+    const header = new Headers();
+    header.append('Content-Type', 'application/json');
+    header.append('phoenix-games-jwt', token);
+    const init = {
+      headers: header,
+      signal
+    };
+    fetch('/api/messages', init)
+      .then(response => response.json())
+      .then(messages => {
+        if (signal.aborted) return;
+        this.setState({ messages });
+      })
+      .catch(() => { })
+      .finally(() => this.requests.delete(requestController));
+  }
+
+  componentWillUnmount() {
+    this.requests.forEach(req => req.abort());
   }
 
   renderView() {
     const { userId } = this.context.user;
     const { messages } = this.state;
+    if (messages.length === 0) {
+      return (
+        <div className="row no-messages">
+          <h2>You have no messages.</h2>
+        </div>
+      );
+    }
     return (
       <MessageList messageList={GroupMessages(messages, userId)} userId={userId} />
     );
@@ -79,16 +100,21 @@ function MessageItem(props) {
       senderName,
       lenderName,
       content,
+      recipientId,
+      postId,
       createdAt
     },
     userId
   } = props;
+  const otherId = userId === senderId
+    ? recipientId
+    : senderId;
   createdAt = formatDate(createdAt);
   if (content.length > 20) {
     content = `${content.slice(0, 20)}...`;
   }
   return (
-    <a href="#messages" className="message-list-item shadow">
+    <a href={`#convo?id=${otherId}&post=${postId}`} className="message-list-item shadow">
       <div className="message-list-item-text">
         <div className="message-list-item-name">
           <h3 className=" text-shadow lora">

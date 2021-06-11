@@ -17,6 +17,7 @@ export default class NewPostForm extends React.Component {
       formGameValue: '',
       formCommentsValue: ''
     };
+    this.requests = new Set();
     this.handleSearch = this.handleSearch.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
@@ -27,18 +28,29 @@ export default class NewPostForm extends React.Component {
   }
 
   handleSearch(event) {
+    const requestController = new AbortController();
+    this.requests.add(requestController);
+    const { signal } = requestController;
     const chosenGame = this.state.gameList.find(gameObject => gameObject.gameId === event.target.dataset.gameid);
-    fetch(`/api/boardGameInfo/${chosenGame.gameId}`)
+    fetch(`/api/boardGameInfo/${chosenGame.gameId}`, { signal })
       .then(response => response.json())
       .then(gameInfo => {
+        if (signal.aborted) return;
         gameInfo.description = DOMPurify.sanitize(gameInfo.description);
         gameInfo.name = chosenGame.name;
         gameInfo.gameId = chosenGame.gameId;
         this.setState({ chosenGame: gameInfo, searchStatus: 'empty', modalView: 'none' });
       })
       .then(() => {
+        if (signal.aborted) return;
         this.setState({ searchStatus: 'chosen', formGameValue: chosenGame.name });
-      });
+      })
+      .catch(() => { })
+      .finally(() => this.requests.delete(requestController));
+  }
+
+  componentWillUnmount() {
+    this.requests.forEach(req => req.abort());
   }
 
   handleClick() {
@@ -68,16 +80,22 @@ export default class NewPostForm extends React.Component {
   runSearch() {
     if (this.state.gameSearch.length > 0) {
       this.setState({ searchStatus: 'searching' });
-      const currentSearch = this.activeSearch = fetch(`/api/boardGames/${this.state.gameSearch}`)
+      const requestController = new AbortController();
+      this.requests.add(requestController);
+      const { signal } = requestController;
+      const currentSearch = this.activeSearch = fetch(`/api/boardGames/${this.state.gameSearch}`, { signal })
         .then(response => response.json())
         .then(games => {
+          if (signal.aborted) return;
           if (this.activeSearch !== currentSearch) return;
           if (games.error || games.length < 1) {
             this.setState({ searchStatus: 'none' });
           } else {
             this.setState({ gameList: games, searchStatus: 'result' });
           }
-        });
+        })
+        .catch(() => { })
+        .finally(() => this.requests.delete(requestController));
     } else {
       this.setState({ searchStatus: 'empty' });
     }
@@ -85,6 +103,9 @@ export default class NewPostForm extends React.Component {
 
   handlePost(event) {
     event.preventDefault();
+    const requestController = new AbortController();
+    this.requests.add(requestController);
+    const { signal } = requestController;
     const header = new Headers();
     header.append('Content-Type', 'application/json');
     let body = {
@@ -107,18 +128,22 @@ export default class NewPostForm extends React.Component {
     const init = {
       method: 'POST',
       headers: header,
-      body: body
+      body: body,
+      signal
     };
     fetch('/api/boardGamePosts', init)
       .then(response => response.json())
       .then(post => {
+        if (signal.aborted) return;
         this.setState({
           chosenGame: null,
           formNameValue: '',
           formGameValue: '',
           formCommentsValue: ''
         });
-      });
+      })
+      .catch(() => { })
+      .finally(() => this.requests.delete(requestController));
   }
 
   renderForm() {

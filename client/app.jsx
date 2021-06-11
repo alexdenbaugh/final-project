@@ -11,6 +11,7 @@ import Auth from './pages/auth';
 import Home from './pages/home';
 import Messages from './pages/messages';
 import decodeToken from './lib/decode-token';
+import Conversation from './pages/conversation';
 
 export default class App extends React.Component {
   constructor(props) {
@@ -86,6 +87,11 @@ export default class App extends React.Component {
     if (path === 'post-info') {
       const postId = this.state.route.params.get('postId');
       return <PostInfo postId={postId} />;
+    }
+    if (path === 'convo') {
+      const otherId = this.state.route.params.get('id');
+      const postId = this.state.route.params.get('post');
+      return <Conversation otherId={otherId} postId={postId} />;
     }
     if (path === 'sign-up' || path === 'sign-in') {
       return <Auth />;
