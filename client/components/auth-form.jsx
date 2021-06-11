@@ -16,9 +16,14 @@ export default class AuthForm extends React.Component {
       errorMatch: '',
       errorLogin: ''
     };
+    this.requests = new Set();
     this.handleChange = this.handleChange.bind(this);
     this.handleCredentials = this.handleCredentials.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentWillUnmount() {
+    this.requests.forEach(req => req.abort());
   }
 
   handleChange(event) {
@@ -85,21 +90,25 @@ export default class AuthForm extends React.Component {
     event.preventDefault();
     const { errorUser, errorReq, errorMatch, username, password } = this.state;
     const { path } = this.props;
-    //
     if (errorUser || errorReq || errorMatch) {
       this.handleCredentials();
       return;
     }
+    const requestController = new AbortController();
+    this.requests.add(requestController);
+    const { signal } = requestController;
     const init = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify({ username, password }),
+      signal
     };
     fetch(`/api/auth/${path}`, init)
       .then(res => res.json())
       .then(result => {
+        if (signal.aborted) return;
         if (result.error && path === 'sign-up') {
           this.setState({
             username: '',
@@ -120,7 +129,9 @@ export default class AuthForm extends React.Component {
           window.location.hash = '#';
           this.props.handleSignIn(result);
         }
-      });
+      })
+      .catch(() => { })
+      .finally(() => this.requests.delete(requestController));
   }
 
   render() {

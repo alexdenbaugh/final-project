@@ -8,12 +8,25 @@ export default class PostInfo extends React.Component {
     this.state = {
       post: null
     };
+    this.requests = new Set();
   }
 
   componentDidMount() {
-    fetch(`/api/boardGamePosts/${this.props.postId}`)
+    const requestController = new AbortController();
+    this.requests.add(requestController);
+    const { signal } = requestController;
+    fetch(`/api/boardGamePosts/${this.props.postId}`, { signal })
       .then(response => response.json())
-      .then(post => this.setState({ post }));
+      .then(post => {
+        if (signal.aborted) return;
+        this.setState({ post });
+      })
+      .catch(() => { })
+      .finally(() => this.requests.delete(requestController));
+  }
+
+  componentWillUnmount() {
+    this.requests.forEach(req => req.abort());
   }
 
   render() {

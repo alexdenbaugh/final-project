@@ -7,10 +7,11 @@ export default class Conversation extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      messages: null,
+      messages: [],
       currentMessage: '',
       intervalId: null
     };
+    this.requests = new Set();
     this.messageContainer = React.createRef();
     this.renderView = this.renderView.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -19,41 +20,50 @@ export default class Conversation extends React.Component {
   }
 
   componentDidMount() {
-    // console.log('didmount')
+    if (!this.context.user) {
+      return null;
+    }
     this.refresh();
-    this.setState({ interval: setInterval(this.refresh, 3000) });
+    this.setState({ intervalId: setInterval(this.refresh, 3000) });
   }
 
   componentDidUpdate() {
+    if (!this.context.user) {
+      return null;
+    }
     const element = this.messageContainer.current;
-    // console.log(element)
     element.scrollTop = element.scrollHeight;
   }
 
   componentWillUnmount() {
     clearInterval(this.state.intervalId);
+    this.requests.forEach(req => req.abort());
   }
 
   refresh() {
-    // console.log('refresh')
     const { otherId } = this.props;
     const token = window.localStorage.getItem('phoenix-games-jwt');
+    const requestController = new AbortController();
+    this.requests.add(requestController);
+    const { signal } = requestController;
     const header = new Headers();
     header.append('Content-Type', 'application/json');
     header.append('phoenix-games-jwt', token);
     const init = {
-      headers: header
+      headers: header,
+      signal
     };
     fetch(`/api/message/convo/${otherId}`, init)
       .then(response => response.json())
       .then(messages => {
-        // console.log('refresh messages', messages)
+        if (signal.aborted) return;
+        if (!messages.length) {
+          window.location.hash = 'messages';
+        }
         this.setState({ messages });
-        // if (this.state.messages === null) {
-        //   return;
-        // } else if (this.state.messages.length !== messages.length) {
-        // }
-      });
+      })
+      .catch(() => { })
+      .finally(() => this.requests.delete(requestController));
   }
 
   handleChange(event) {
@@ -70,6 +80,9 @@ export default class Conversation extends React.Component {
     const { otherId, postId } = this.props;
     const { username } = this.context.user;
     const token = window.localStorage.getItem('phoenix-games-jwt');
+    const requestController = new AbortController();
+    this.requests.add(requestController);
+    const { signal } = requestController;
     const header = new Headers();
     header.append('Content-Type', 'application/json');
     header.append('phoenix-games-jwt', token);
@@ -83,53 +96,54 @@ export default class Conversation extends React.Component {
     const init = {
       method: 'POST',
       headers: header,
-      body: body
+      body: body,
+      signal
     };
     fetch('/api/messages', init)
       .then(response => response.json())
       .then(message => {
+        if (signal.aborted) return;
         this.setState({ currentMessage: '' }, this.refresh);
-      });
+      })
+      .catch(() => { })
+      .finally(() => this.requests.delete(requestController));
   }
 
   renderView() {
-    // console.log('renderView')
     const { userId } = this.context.user;
     const { messages } = this.state;
-    if (!messages) {
-      return (
-        <div className="row no-messages">
-          <h2>You have no messages.</h2>
-        </div>
-      );
-    }
     return (
       <div className="conversation-container">
         <div className="convo-list-container" ref={this.messageContainer}>
-          <MessageList messages={messages} userId={userId} />
+          {
+            messages.length
+              ? <MessageList messages={messages} userId={userId} />
+              : <h2>Loading Messages...</h2>
+          }
         </div>
-        <form onSubmit={this.handleSend} className="row row-2 conversation-write-container">
-          <div className="convo-input shadow col-2">
-            <div className="search-icon">
-              <label htmlFor="convo-message-input"><i className="text-shadow orange fas fa-comment"></i></label>
+        { Boolean(messages.length) &&
+          <form onSubmit={this.handleSend} className="row row-2 conversation-write-container">
+            <div className="convo-input shadow col-2">
+              <div className="search-icon">
+                <label htmlFor="convo-message-input"><i className="text-shadow orange fas fa-comment"></i></label>
+              </div>
+              <input autoFocus autoComplete="off" onChange={this.handleChange} type="text" className="lora" name='currentMessage' value={this.state.currentMessage} id="convo-message-input" placeholder="send a message" />
+              <button type="submit" className="send-message-button" ><i className="text-shadow fas fa-arrow-circle-up"></i></button>
             </div>
-            <input autoFocus autoComplete="off" onChange={this.handleChange} type="text" className="lora" name='currentMessage' value={this.state.currentMessage} id="convo-message-input" placeholder="send a message" />
-            <button type="submit" className="send-message-button" ><i className="text-shadow fas fa-arrow-circle-up"></i></button>
-          </div>
-        </form>
+          </form>
+          }
       </div>
     );
   }
 
   render() {
     if (!this.context.user) return <Redirect to="sign-in" />;
-    if (!this.state.messages) {
-      return null;
-    }
     const { messages } = this.state;
     const { userId } = this.context.user;
     let name;
-    if (messages[0].senderId === userId) {
+    if (!messages.length) {
+      name = '';
+    } else if (messages[0].senderId === userId) {
       name = messages[0].lenderName;
     } else {
       name = messages[0].senderName;
@@ -137,9 +151,11 @@ export default class Conversation extends React.Component {
     return (
       <>
         <div className="row">
-          <div className="col-1 convo-header shadow">
-            <h2 className="text-shadow orange">{name}</h2>
-          </div>
+          { Boolean(messages.length) &&
+            <div className="col-1 convo-header shadow">
+              <h2 className="text-shadow orange">{name}</h2>
+            </div>
+          }
         </div>
         {this.renderView()}
       </>

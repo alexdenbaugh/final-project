@@ -90,7 +90,7 @@ export default class App extends React.Component {
     }
     if (path === 'convo') {
       const otherId = this.state.route.params.get('id');
-      const postId = this.state.route.params.get('id');
+      const postId = this.state.route.params.get('post');
       return <Conversation otherId={otherId} postId={postId} />;
     }
     if (path === 'sign-up' || path === 'sign-in') {

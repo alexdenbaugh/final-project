@@ -11,21 +11,33 @@ export default class Messages extends React.Component {
       messages: null
     };
     this.renderView = this.renderView.bind(this);
+    this.requests = new Set();
   }
 
   componentDidMount() {
     const token = window.localStorage.getItem('phoenix-games-jwt');
+    const requestController = new AbortController();
+    this.requests.add(requestController);
+    const { signal } = requestController;
     const header = new Headers();
     header.append('Content-Type', 'application/json');
     header.append('phoenix-games-jwt', token);
     const init = {
-      headers: header
+      headers: header,
+      signal
     };
     fetch('/api/messages', init)
       .then(response => response.json())
       .then(messages => {
+        if (signal.aborted) return;
         this.setState({ messages });
-      });
+      })
+      .catch(() => { })
+      .finally(() => this.requests.delete(requestController));
+  }
+
+  componentWillUnmount() {
+    this.requests.forEach(req => req.abort());
   }
 
   renderView() {
@@ -102,7 +114,7 @@ function MessageItem(props) {
     content = `${content.slice(0, 20)}...`;
   }
   return (
-    <a href={`#convo?id=${otherId}?post=${postId}`} className="message-list-item shadow">
+    <a href={`#convo?id=${otherId}&post=${postId}`} className="message-list-item shadow">
       <div className="message-list-item-text">
         <div className="message-list-item-name">
           <h3 className=" text-shadow lora">

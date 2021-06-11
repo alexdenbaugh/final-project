@@ -12,6 +12,7 @@ export default class Posts extends React.Component {
       recentPosts: [],
       searchedPosts: []
     };
+    this.requests = new Set();
     this.handleType = this.handleType.bind(this);
     this.renderView = this.renderView.bind(this);
     this.runSearch = debounce(this.runSearch.bind(this), 500);
@@ -19,12 +20,22 @@ export default class Posts extends React.Component {
   }
 
   componentDidMount() {
-    fetch('/api/boardGamePosts')
+    const requestController = new AbortController();
+    this.requests.add(requestController);
+    const { signal } = requestController;
+    fetch('/api/boardGamePosts', { signal })
       .then(response => response.json())
       .then(postInfo => {
+        if (signal.aborted) return;
         const recentPosts = postInfo.slice();
         this.setState({ recentPosts });
-      });
+      })
+      .catch(() => {})
+      .finally(() => this.requests.delete(requestController));
+  }
+
+  componentWillUnmount() {
+    this.requests.forEach(req => req.abort());
   }
 
   handleType(event) {
@@ -37,16 +48,22 @@ export default class Posts extends React.Component {
     const { searchValue } = this.state;
     if (this.state.searchValue.length > 0) {
       this.setState({ searchStatus: 'searching' });
-      const currentSearch = this.activeSearch = fetch(`/api/boardGamePosts/search/${searchValue}`)
+      const requestController = new AbortController();
+      this.requests.add(requestController);
+      const { signal } = requestController;
+      const currentSearch = this.activeSearch = fetch(`/api/boardGamePosts/search/${searchValue}`, { signal })
         .then(response => response.json())
         .then(posts => {
+          if (signal.aborted) return;
           if (this.activeSearch !== currentSearch) return;
           if (posts.error || posts.length < 1) {
             this.setState({ searchStatus: 'none' });
           } else {
             this.setState({ searchedPosts: posts, searchStatus: 'result' });
           }
-        });
+        })
+        .catch(() => { })
+        .finally(() => this.requests.delete(requestController));
     } else {
       this.setState({ searchStatus: 'empty' });
     }
