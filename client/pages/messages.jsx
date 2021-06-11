@@ -14,16 +14,18 @@ export default class Messages extends React.Component {
   }
 
   componentDidMount() {
-    const { userId } = this.context.user;
-    if (!userId) {
-      return null;
-    } else {
-      fetch(`/api/messages/${userId}`)
-        .then(response => response.json())
-        .then(messages => {
-          this.setState({ messages });
-        });
-    }
+    const token = window.localStorage.getItem('phoenix-games-jwt');
+    const header = new Headers();
+    header.append('Content-Type', 'application/json');
+    header.append('phoenix-games-jwt', token);
+    const init = {
+      headers: header
+    };
+    fetch('/api/messages', init)
+      .then(response => response.json())
+      .then(messages => {
+        this.setState({ messages });
+      });
   }
 
   renderView() {

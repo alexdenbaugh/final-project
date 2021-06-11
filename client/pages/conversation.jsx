@@ -8,19 +8,52 @@ export default class Conversation extends React.Component {
     super(props);
     this.state = {
       messages: null,
-      currentMessage: ''
+      currentMessage: '',
+      intervalId: null
     };
+    this.messageContainer = React.createRef();
+    this.renderView = this.renderView.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSend = this.handleSend.bind(this);
     this.refresh = this.refresh.bind(this);
   }
 
+  componentDidMount() {
+    // console.log('didmount')
+    this.refresh();
+    this.setState({ interval: setInterval(this.refresh, 3000) });
+  }
+
+  componentDidUpdate() {
+    const element = this.messageContainer.current;
+    // console.log(element)
+    element.scrollTop = element.scrollHeight;
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.intervalId);
+  }
+
   refresh() {
+    // console.log('refresh')
     const { otherId } = this.props;
-    const { userId } = this.context.user;
-    fetch(`/api/message/convo/${userId}/${otherId}`)
+    const token = window.localStorage.getItem('phoenix-games-jwt');
+    const header = new Headers();
+    header.append('Content-Type', 'application/json');
+    header.append('phoenix-games-jwt', token);
+    const init = {
+      headers: header
+    };
+    fetch(`/api/message/convo/${otherId}`, init)
       .then(response => response.json())
-      .then(messages => this.setState({ messages }));
+      .then(messages => {
+        // console.log('refresh messages', messages)
+        this.setState({ messages });
+        // if (this.state.messages === null) {
+        //   return;
+        // } else if (this.state.messages.length !== messages.length) {
+        // }
+      });
   }
 
   handleChange(event) {
@@ -35,11 +68,12 @@ export default class Conversation extends React.Component {
     }
     const { currentMessage } = this.state;
     const { otherId, postId } = this.props;
-    const { username, userId } = this.context.user;
+    const { username } = this.context.user;
+    const token = window.localStorage.getItem('phoenix-games-jwt');
     const header = new Headers();
     header.append('Content-Type', 'application/json');
+    header.append('phoenix-games-jwt', token);
     let body = {
-      senderId: userId,
       senderName: username,
       recipientId: otherId,
       content: currentMessage,
@@ -59,6 +93,7 @@ export default class Conversation extends React.Component {
   }
 
   renderView() {
+    // console.log('renderView')
     const { userId } = this.context.user;
     const { messages } = this.state;
     if (!messages) {
@@ -70,7 +105,9 @@ export default class Conversation extends React.Component {
     }
     return (
       <div className="conversation-container">
-        <MessageList messages={messages} userId={userId} />
+        <div className="convo-list-container" ref={this.messageContainer}>
+          <MessageList messages={messages} userId={userId} />
+        </div>
         <form onSubmit={this.handleSend} className="row row-2 conversation-write-container">
           <div className="convo-input shadow col-2">
             <div className="search-icon">
@@ -87,7 +124,6 @@ export default class Conversation extends React.Component {
   render() {
     if (!this.context.user) return <Redirect to="sign-in" />;
     if (!this.state.messages) {
-      this.refresh();
       return null;
     }
     const { messages } = this.state;
@@ -123,9 +159,9 @@ function MessageList(props) {
       );
     });
     return (
-      <div className="convo-list-container">
+      <>
         {$messages}
-      </div>
+      </>
     );
   }
 }
