@@ -21,6 +21,7 @@ const db = new pg.Pool({
 
 const jsonMiddleware = express.json();
 app.use(jsonMiddleware);
+app.use(staticMiddleware);
 
 app.post('/api/boardGamePosts', (req, res, next) => {
   let { lender, lenderId, game, gameId, gameImg, comments, thumbnail, description, minPlayers, maxPlayers, minPlayTime, maxPlayTime, age, year } = req.body;
@@ -398,7 +399,6 @@ app.get('/api/message/convo/:otherId', (req, res, next) => {
     .catch(err => next(err));
 });
 
-app.use(staticMiddleware);
 app.use(errorMiddleware);
 
 app.listen(process.env.PORT, () => {
