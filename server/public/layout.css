@@ -1,7 +1,21 @@
 .container {
-  padding: 10px;
+  padding: 0.625rem;
   position: relative;
   min-height: 100vh;
+}
+
+.mobile-container {
+  width: 100%;
+  height: 100%;
+  background-color: inherit;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.313rem;
+}
+
+.desktop-container {
+  display: none;
 }
 
 .search {
@@ -13,7 +27,7 @@
 }
 
 .col {
-  margin: 10px 0;
+  margin: 0.625rem 0;
 }
 
 .row-2 {
@@ -38,29 +52,29 @@
   flex-wrap: wrap;
   justify-content: space-evenly;
   align-content: space-between;
-  padding: 10px;
-  margin: 10px 0;
-  height: 200px;
+  padding: 0.625rem;
+  margin: 0.625rem 0;
+  height: 12.5rem;
 }
 
 label {
-  margin: 10px;
+  margin: 0.625rem;
   font-weight: 600;
 }
 
 .label {
   width: fit-content;
-  margin-bottom: 10px;
+  margin-bottom: 0.625rem;
 }
 
 .search-input {
-  margin-bottom: 20px;
+  margin-bottom: 1.25rem;
 }
 
 @media screen and (min-width: 768px) {
   .container {
     margin: 0 auto;
-    max-width: 800px;
+    max-width: 50rem;
   }
 
   div.mobile-container {
@@ -74,7 +88,7 @@ label {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 5px;
+    padding: 0.313rem;
   }
 
   div.user-menu-container {
@@ -83,11 +97,11 @@ label {
 
   i.invalid-icon,
   i.valid-icon {
-    font-size: 30px;
+    font-size: 1.875rem;
   }
 
   .phoenix-logo {
-    font-size: 25px;
+    font-size: 1.563rem;
   }
 
   .col-4 {
@@ -99,20 +113,20 @@ label {
   }
 
   .image-post {
-    padding-right: 10px;
-    margin-bottom: 20px;
+    padding-right: 0.625rem;
+    margin-bottom: 1.25rem;
   }
 
   .text-post {
-    padding-left: 10px;
+    padding-left: 0.625rem;
   }
 
   div.form-element {
-    margin: 5px 0 20px 0;
+    margin: 0.313rem 0 1.25rem 0;
   }
 
   div input {
-    height: 50px;
+    height: 3.125rem;
   }
 
   .modal-container > .row {
@@ -132,15 +146,15 @@ label {
   }
 
   .post-info-left {
-    padding-right: 5px;
+    padding-right: 0.313rem;
   }
 
   .post-info-right {
-    padding-left: 5px;
+    padding-left: 0.313rem;
   }
 
   .post-info-block-container {
-    padding-right: 20px;
+    padding-right: 1.25rem;
   }
 
   a.post-item {

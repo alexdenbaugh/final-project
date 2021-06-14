@@ -151,7 +151,7 @@ export default class AuthForm extends React.Component {
                 <label className="orange" htmlFor="username">Username:</label>
               </div>
               <div className="input auth-form-input">
-                <input required autoFocus minLength="6" maxLength="16" type="text" onChange={this.handleChange} value={this.state.username} className="lora shadow" name="username" id="username" />
+                <input required autoFocus minLength="6" maxLength="16" type="text" onChange={this.handleChange} value={this.state.username} className="lora" name="username" id="username" />
                 <i className={this.state.usernameIcon}></i>
                 {
                   this.state.errorUser
@@ -165,7 +165,7 @@ export default class AuthForm extends React.Component {
                 <label className="orange" htmlFor="password">Password:</label>
               </div>
               <div className="input auth-form-input">
-                <input required type="password" minLength="8" maxLength="20" onChange={this.handleChange} value={this.state.password} className="lora shadow" name="password" id="password" />
+                <input required type="password" minLength="8" maxLength="20" onChange={this.handleChange} value={this.state.password} className="lora" name="password" id="password" />
                 <i className={this.state.passwordIcon}></i>
                 {
                   this.state.errorReq
@@ -179,7 +179,7 @@ export default class AuthForm extends React.Component {
                 <label className="orange" htmlFor="confirmPassword">Confirm Password:</label>
               </div>
               <div className="input auth-form-input">
-                <input required type="password" minLength="8" maxLength="20" onChange={this.handleChange} value={this.state.confirmPassword} className="lora shadow" name="confirmPassword" id="confirmPassword" />
+                <input required type="password" minLength="8" maxLength="20" onChange={this.handleChange} value={this.state.confirmPassword} className="lora" name="confirmPassword" id="confirmPassword" />
                 <i className={this.state.confirmPasswordIcon}></i>
                 {
                   this.state.errorMatch
@@ -220,7 +220,7 @@ export default class AuthForm extends React.Component {
                 <label className="orange" htmlFor="username">Username:</label>
               </div>
               <div className="input auth-form-input">
-                <input required autoFocus type="text" onChange={this.handleChange} value={this.state.username} className="lora shadow" name="username" id="username" />
+                <input required autoFocus type="text" onChange={this.handleChange} value={this.state.username} className="lora" name="username" id="username" />
               </div>
             </div>
             <div className="form-element">
@@ -228,7 +228,7 @@ export default class AuthForm extends React.Component {
                 <label className="orange" htmlFor="password">Password:</label>
               </div>
               <div className="input auth-form-input">
-                <input required type="password" onChange={this.handleChange} value={this.state.password} className="lora shadow" name="password" id="password" />
+                <input required type="password" onChange={this.handleChange} value={this.state.password} className="lora" name="password" id="password" />
                 {
                   this.state.errorLogin
                     ? <span className="invalid-text lora">{this.state.errorLogin}</span>
