@@ -45,10 +45,10 @@ export default class PostInfo extends React.Component {
         <div className="row row-2">
           <div className="col-2 post-info-left">
             <div className="col-1 image-post">
-              <img className="shadow" src={post.image} alt={post.gameName} />
+              <img src={post.image} alt={post.gameName} />
             </div>
             <div className="col-1 post-info-block-container">
-              <div className="post-info-block shadow">
+              <div className="post-info-block">
                 <div className="post-info-block-title">
                   <h3 className="orange">Players:</h3>
                 </div>
@@ -56,7 +56,7 @@ export default class PostInfo extends React.Component {
                   <h3 className="lora">{post.minPlayers === post.maxPlayers ? `${post.maxPlayers}` : `${post.minPlayers} - ${post.maxPlayers}`}</h3>
                 </div>
               </div>
-              <div className="post-info-block shadow">
+              <div className="post-info-block">
                 <div className="post-info-block-title">
                   <h3 className="orange">Play Time:</h3>
                 </div>
@@ -64,7 +64,7 @@ export default class PostInfo extends React.Component {
                   <h3 className="lora">{post.minPlayTime === post.maxPlayTime ? `${post.maxPlayTime} min` : `${post.minPlayTime} - ${post.maxPlayTime} min`}</h3>
                 </div>
               </div>
-              <div className="post-info-block shadow">
+              <div className="post-info-block">
                 <div className="post-info-block-title">
                   <h3 className="orange">Ages:</h3>
                 </div>
@@ -72,7 +72,7 @@ export default class PostInfo extends React.Component {
                   <h3 className="lora">{`${post.ageLimit}+`}</h3>
                 </div>
               </div>
-              <div className="post-info-block shadow">
+              <div className="post-info-block">
                 <div className="post-info-block-title">
                   <h3 className="orange">Year:</h3>
                 </div>
@@ -87,7 +87,7 @@ export default class PostInfo extends React.Component {
               <div className="shadow post-info-text-title">
                 <h3 className="orange">Description:</h3>
               </div>
-              <div className="col-1 shadow post-info-text-value-long">
+              <div className="col-1 post-info-text-value-long">
                 <h3 dangerouslySetInnerHTML={{ __html: post.description }} className="lora"></h3>
               </div>
             </div>
@@ -95,7 +95,7 @@ export default class PostInfo extends React.Component {
               <div className="shadow post-info-text-title">
                 <h3 className="orange">Lender:</h3>
               </div>
-              <div className="col-1 shadow post-info-text-value">
+              <div className="col-1 post-info-text-value">
                 <h3 className="lora">{post.lenderName}</h3>
               </div>
             </div>
@@ -103,7 +103,7 @@ export default class PostInfo extends React.Component {
               <div className="shadow post-info-text-title">
                 <h3 className="orange">Lender&apos;s Comments:</h3>
               </div>
-              <div className="col-1 shadow post-info-text-value-long">
+              <div className="col-1 post-info-text-value-long">
                 <h3 className="lora">{post.lenderComments}</h3>
               </div>
             </div>

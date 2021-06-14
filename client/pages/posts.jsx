@@ -170,23 +170,23 @@ function PostItem(props) {
     postId
   } = props.info;
   return (
-    <a href={`#post-info?postId=${postId}`} className="post-item shadow">
+    <a href={`#post-info?postId=${postId}`} className="post-item">
       <div className="post-item-info">
         <div>
           <h3 className="orange shadow post-item-info-title">Title</h3>
         </div>
         <div>
-          <h3 className="shadow lora post-item-info-value">{game}</h3>
+          <h3 className="lora post-item-info-value">{game}</h3>
         </div>
         <div>
           <h3 className="orange shadow post-item-info-title">Lender</h3>
         </div>
         <div>
-          <h3 className="shadow lora post-item-info-value">{name}</h3>
+          <h3 className="lora post-item-info-value">{name}</h3>
         </div>
       </div>
       <div className="post-item-img">
-        <img src={image} alt={game} className="shadow" />
+        <img src={image} alt={game} />
       </div>
     </a>
   );

@@ -158,14 +158,14 @@ export default class NewPostForm extends React.Component {
           </div>
           <div className="row row-2">
             <div className="col-2 col image-post">
-              <img className="shadow" src={chosenGame.imageUrl} alt={chosenGame.name} />
+              <img src={chosenGame.imageUrl} alt={chosenGame.name} />
             </div>
             <div className="col-2 col text-post">
               <div className="form-element">
                 <div className="label bookmark shadow">
                   <label className="orange" htmlFor="new-game-search">Name of Game:</label>
                 </div>
-                <div className="search-input shadow">
+                <div className="search-input">
                   <div className="search-icon">
                     <label htmlFor="new-game-search"><i className="orange fas fa-search"></i></label>
                   </div>
@@ -177,7 +177,7 @@ export default class NewPostForm extends React.Component {
                   <label className="orange" htmlFor="new-game-name">Your Name:</label>
                 </div>
                 <div className="input">
-                  <input required type="text" onChange={this.handleChange} value={this.state.formNameValue} className="lora shadow" name="name" id="new-game-name" />
+                  <input required type="text" onChange={this.handleChange} value={this.state.formNameValue} className="lora" name="name" id="new-game-name" />
                 </div>
               </div>
             </div>
@@ -188,7 +188,7 @@ export default class NewPostForm extends React.Component {
                 <label className="orange" htmlFor="new-game-comments">Comments:</label>
               </div>
               <div className="input col-1">
-                <textarea onChange={this.handleChange} value={this.state.formCommentsValue} required className="lora shadow" name="comments" id="new-game-comments" cols="30" rows="8"></textarea>
+                <textarea onChange={this.handleChange} value={this.state.formCommentsValue} required className="lora" name="comments" id="new-game-comments" cols="30" rows="8"></textarea>
               </div>
             </div>
           </div>
@@ -204,14 +204,14 @@ export default class NewPostForm extends React.Component {
           </div>
           <div className="row row-2">
             <div className="col-2 col image-post">
-              <img className="shadow" src=".\images\placeholder-image-square.jpg" alt="game image" />
+              <img src=".\images\placeholder-image-square.jpg" alt="game image" />
             </div>
             <div className="col-2 col text-post">
               <div className="form-element">
                 <div className="label bookmark shadow">
                   <label className="orange" htmlFor="new-game-search">Name of Game:</label>
                 </div>
-                <div className="search-input shadow">
+                <div className="search-input">
                   <div className="search-icon">
                     <label htmlFor="new-game-search"><i className="orange fas fa-search"></i></label>
                   </div>
@@ -223,7 +223,7 @@ export default class NewPostForm extends React.Component {
                   <label className="orange" htmlFor="new-game-name">Your Name:</label>
                 </div>
                 <div className="input">
-                  <input onChange={this.handleChange} required type="text" className="lora shadow" value={this.state.formNameValue} id="new-game-name" />
+                  <input onChange={this.handleChange} required type="text" className="lora" value={this.state.formNameValue} id="new-game-name" />
                 </div>
               </div>
             </div>
@@ -234,7 +234,7 @@ export default class NewPostForm extends React.Component {
                 <label className="orange" htmlFor="new-game-comments">Comments:</label>
               </div>
               <div className="input col-1">
-                <textarea onChange={this.handleChange} required className="lora shadow" name="new-game-comments" value={this.state.formCommentsValue} id="new-game-comments" cols="30" rows="8"></textarea>
+                <textarea onChange={this.handleChange} required className="lora" name="new-game-comments" value={this.state.formCommentsValue} id="new-game-comments" cols="30" rows="8"></textarea>
               </div>
             </div>
           </div>
