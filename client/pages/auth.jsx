@@ -1,16 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
 import AppContext from '../lib/app-context';
 import AuthForm from '../components/auth-form';
-import Redirect from '../components/redirect';
 
-export default class Auth extends React.Component {
-  render() {
-    const { route, user, handleSignIn } = this.context;
-    if (user) return <Redirect to="" />;
-    return (
-      <AuthForm key={route.path} path={ route.path } handleSignIn={handleSignIn} />
-    );
-  }
+export default function Auth() {
+  const { user, handleSignIn } = useContext(AppContext);
+  const location = useLocation();
+  const path = location.pathname.slice(1); // removes the leading slash
+
+  if (user) return <Navigate to="/" replace />;
+  return <AuthForm key={path} path={path} handleSignIn={handleSignIn} />;
 }
-
-Auth.contextType = AppContext;

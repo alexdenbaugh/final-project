@@ -1,10 +1,9 @@
-function checkPassword(password) {
-  const specialChars = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')'];
-  if (password.search(/([A-Z])\w+/g) === -1 || password.search(/\d/g) === -1 || password.split('').filter(char => specialChars.includes(char)).length === 0) {
-    return false;
-  } else {
-    return true;
-  }
-}
+const SPECIAL_CHARS = ['!', '@', '#', '$', '%', '^', '&', '*', '(', ')'];
 
-export default checkPassword;
+export default function checkPassword(password) {
+  const hasUpperCase = /[A-Z]/.test(password);
+  const hasNumber = /\d/.test(password);
+  const hasSpecialChar = password.split('').some(char => SPECIAL_CHARS.includes(char));
+
+  return hasUpperCase && hasNumber && hasSpecialChar;
+}

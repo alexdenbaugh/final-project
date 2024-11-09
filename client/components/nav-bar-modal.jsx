@@ -1,127 +1,93 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import AppContext from '../lib/app-context';
-import NewMessage from './new-message';
 
-export default class NavBarModal extends React.Component {
-  constructor(props) {
-    super(props);
-    this.renderMenu = this.renderMenu.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-  }
+export default function NavBarModal() {
+  const { user, modal, handleHeader, handleSignOut } = useContext(AppContext);
+  const navigate = useNavigate();
 
-  handleClick(event) {
+  const handleClick = event => {
     if (event.target.dataset.view === 'new-post') {
-      window.location.hash = 'create-post';
+      navigate('/create-post');
     }
-  }
+  };
 
-  renderMenu() {
-    const { modal } = this.context;
-    const userLink = this.context.user
-      ? 'Sign-Out'
-      : 'Sign-In / Sign-Up';
+  const renderMenu = () => {
+    const userLink = user ? 'Sign-Out' : 'Sign-In';
+    const userAction = user ? handleSignOut : () => navigate('/sign-in');
+
     if (modal === 'burger-menu') {
       return (
         <>
-          <a href="#" className={`shadow text-shadow ${modal}-item`}>
-            <div className="menu-item-type">
-              <div className="menu-item-icon">
-                <i className="fab fa-phoenix-framework"></i>
-              </div>
-              <div className="menu-item-text">
-                <h3>Home</h3>
-              </div>
-            </div>
-            <div className="menu-item-arrow">
-              <i className="fas fa-chevron-right"></i>
-            </div>
-          </a>
-          <a href="#posts" className={`shadow text-shadow ${modal}-item`}>
-            <div className="menu-item-type">
-              <div className="menu-item-icon">
-                <i className="fas fa-dice"></i>
-              </div>
-              <div className="menu-item-text">
-                <h3>Game Posts</h3>
-              </div>
-            </div>
-            <div className="menu-item-arrow">
-              <i className="fas fa-chevron-right"></i>
-            </div>
-          </a>
-          <a href="#create-post" onClick={this.handleClick} className="shadow text-shadow burger-menu-item" data-view="new-post">
-            <div className="menu-item-type" data-view="new-post">
-              <div className="menu-item-icon" data-view="new-post">
-                <i className="fas fa-plus" data-view="new-post"></i>
-              </div>
-              <div className="menu-item-text" data-view="new-post">
-                <h3 data-view="new-post">New Post</h3>
-              </div>
-            </div>
-            <div data-view="new-post" className="menu-item-arrow">
-              <i data-view="new-post" className="fas fa-chevron-right"></i>
-            </div>
-          </a>
-          <a href="#messages" onClick={this.handleClick} className="shadow text-shadow burger-menu-item">
-            <div className="menu-item-type">
-              <div className="menu-item-icon">
-                <i className="fas fa-comments"></i>
-              </div>
-              <div className="menu-item-text">
-                <h3>Messages</h3>
-              </div>
-            </div>
-            <div data-view="new-post" className="menu-item-arrow">
-              <i data-view="new-post" className="fas fa-chevron-right"></i>
-            </div>
-          </a>
+          <Link to="/" className="menu-option shadow" onClick={handleHeader}>
+            <i className="fas fa-home"></i>
+            <span>Home</span>
+          </Link>
+          <Link to="/posts" className="menu-option shadow" onClick={handleHeader}>
+            <i className="fas fa-dice"></i>
+            <span>Games</span>
+          </Link>
+          <button
+            data-view="new-post"
+            onClick={e => {
+              handleClick(e);
+              handleHeader();
+            }}
+            className="menu-option shadow">
+            <i className="fas fa-plus-circle"></i>
+            <span>New Post</span>
+          </button>
+          <Link to="/messages" className="menu-option shadow" onClick={handleHeader}>
+            <i className="fas fa-envelope"></i>
+            <span>Messages</span>
+          </Link>
         </>
       );
-    } else if (modal === 'user-menu' && this.context.user) {
-      return (
-        <a href="#sign-in" onClick={this.context.handleSignOut} className={`shadow text-shadow ${modal}-item`}><h3>{userLink}</h3></a>
-      );
-    } else if (modal === 'user-menu') {
-      return (
-        <a href="#sign-in" className={`shadow text-shadow ${modal}-item`}><h3>{userLink}</h3></a>
-      );
-    } else if (modal === 'new-message') {
-      return (
-        <NewMessage user={this.context.user} postId={this.context.route.params.get('postId')} handleHeader={this.context.handleHeader} />
-      );
     }
-  }
 
-  render() {
-    const { modal, handleHeader } = this.context;
-    const hidden = modal === 'hidden'
-      ? 'hidden'
-      : '';
+    return (
+      <button onClick={() => {
+        userAction();
+        handleHeader();
+      }} className="menu-option shadow">
+        <i className="fas fa-sign-out-alt"></i>
+        <span>{userLink}</span>
+      </button>
+    );
+  };
 
-    if (modal === 'new-message') {
-      return (
-        <div onClick={handleHeader} className={`${hidden} new-message-modal-container`}>
-          {this.renderMenu()}
-        </div>
+  const hidden = modal === 'hidden' ? 'hidden' : '';
+
+  const modalButton = modal === 'burger-menu'
+    ? (
+      <button
+        onClick={handleHeader}
+        className="text-shadow close-menu"
+        type="button"
+      >
+        <i className="fas fa-times"></i>
+      </button>
+      )
+    : (
+      <button
+        onClick={handleHeader}
+        className="text-shadow user-menu"
+        type="button"
+      >
+        <i className="fas fa-user"></i>
+      </button>
       );
-    } else {
-      return (
-        <div onClick={handleHeader} className={`${hidden} ${modal}-nav-modal-container`}>
-          <div className={`${modal}-container`}>
-            <div className={`shadow ${modal}-head`}>
-              {modal === 'burger-menu'
-                ? <button onClick={handleHeader} className="text-shadow close-menu"><i className="fas fa-times"></i></button>
-                : <button onClick={handleHeader} className="text-shadow user-menu"><i className="fas fa-user"></i></button>
-              }
-            </div>
-            <div className="menu-options">
-              {this.renderMenu()}
-            </div>
-          </div>
+
+  return (
+    <div onClick={handleHeader} className={`${hidden} ${modal}-nav-modal-container`}>
+      <div className={`${modal}-container`}>
+        <div className={`shadow ${modal}-head`}>
+          {modalButton}
         </div>
-      );
-    }
-  }
+        <div className="menu-options">
+          {renderMenu()}
+        </div>
+      </div>
+    </div>
+  );
 }
-
-NavBarModal.contextType = AppContext;

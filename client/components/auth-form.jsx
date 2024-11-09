@@ -1,250 +1,243 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
 import checkPassword from '../lib/password-check';
 
-export default class AuthForm extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: '',
-      password: '',
-      confirmPassword: '',
-      usernameIcon: 'hidden',
-      passwordIcon: 'hidden',
-      confirmPasswordIcon: 'hidden',
-      errorUser: '',
-      errorReq: '',
-      errorMatch: '',
-      errorLogin: ''
+export default function AuthForm({ path, handleSignIn }) {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+    confirmPassword: '',
+    usernameIcon: 'hidden',
+    passwordIcon: 'hidden',
+    confirmPasswordIcon: 'hidden',
+    errorUser: '',
+    errorReq: '',
+    errorMatch: '',
+    errorLogin: ''
+  });
+
+  const handleCredentials = () => {
+    const { username, password, confirmPassword } = formData;
+    const passwordReq = checkPassword(password);
+    const icons = {
+      usernameIcon: username.length >= 6 ? 'fas fa-check' : 'hidden',
+      passwordIcon: passwordReq ? 'fas fa-check' : 'hidden',
+      confirmPasswordIcon: password === confirmPassword && password.length > 0 ? 'fas fa-check' : 'hidden',
+      errorReq: !passwordReq && password.length > 0 ? 'Password requirements not met' : '',
+      errorMatch: password !== confirmPassword && confirmPassword.length > 0 ? 'Passwords do not match' : ''
     };
-    this.requests = new Set();
-    this.handleChange = this.handleChange.bind(this);
-    this.handleCredentials = this.handleCredentials.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+    setFormData(prev => ({
+      ...prev,
+      ...icons
+    }));
+  };
 
-  componentWillUnmount() {
-    this.requests.forEach(req => req.abort());
-  }
-
-  handleChange(event) {
-    const { name, value } = event.target;
-    if (this.props.path === 'sign-up') {
-      this.setState({ [name]: value }, this.handleCredentials);
-    } else {
-      this.setState({ [name]: value });
-    }
-  }
-
-  handleCredentials() {
-    const { username, password, confirmPassword } = this.state;
-    if (password.length > 0 && password.length < 8) {
-      this.setState({
-        passwordIcon: 'invalid-icon fas fa-times', errorReq: ''
-      });
-    } else if (password.length >= 8 && !checkPassword(password)) {
-      this.setState({
-        passwordIcon: 'invalid-icon fas fa-times', errorReq: 'Password doesn\'t meet the requirements'
-      });
-    } else if (password.length >= 8) {
-      this.setState({
-        passwordIcon: 'valid-icon fas fa-check', errorReq: ''
-      });
-    } else {
-      this.setState({
-        passwordIcon: 'hidden', errorReq: ''
-      });
-    }
-    if (confirmPassword.length === 0) {
-      this.setState({
-        confirmPasswordIcon: 'hidden', errorMatch: ''
-      });
-    } else if (confirmPassword === password) {
-      this.setState({
-        confirmPasswordIcon: 'valid-icon fas fa-check', errorMatch: ''
-      });
-    } else {
-      this.setState({
-        confirmPasswordIcon: 'invalid-icon fas fa-times', errorMatch: 'Password don\'t match'
-      });
-    }
-    if (username.length === 0) {
-      this.setState({
-        usernameIcon: 'hidden', errorUser: ''
-      });
-    } else if (!username.match('^[0-9a-zA-Z]+$')) {
-      this.setState({
-        usernameIcon: 'invalid-icon fas fa-times', errorUser: 'No special characters'
-      });
-    } else if (username.length < 6) {
-      this.setState({
-        usernameIcon: 'invalid-icon fas fa-times', errorUser: ''
-      });
-    } else {
-      this.setState({
-        usernameIcon: 'valid-icon fas fa-check', errorUser: ''
-      });
-    }
-  }
-
-  handleSubmit(event) {
+  const handleSubmit = async event => {
     event.preventDefault();
-    const { errorUser, errorReq, errorMatch, username, password } = this.state;
-    const { path } = this.props;
-    if (errorUser || errorReq || errorMatch) {
-      this.handleCredentials();
-      return;
-    }
-    const requestController = new AbortController();
-    this.requests.add(requestController);
-    const { signal } = requestController;
-    const init = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ username, password }),
-      signal
-    };
-    fetch(`/api/auth/${path}`, init)
-      .then(res => res.json())
-      .then(result => {
-        if (signal.aborted) return;
-        if (result.error && path === 'sign-up') {
-          this.setState({
-            username: '',
-            password: '',
-            confirmPassword: '',
-            usernameIcon: 'hidden',
-            passwordIcon: 'hidden',
-            confirmPasswordIcon: 'hidden',
-            errorUser: 'Username taken, try another',
-            errorReq: '',
-            errorMatch: ''
-          });
-        } else if (result.error && path === 'sign-in') {
-          this.setState({
-            errorLogin: 'Invalid username/password'
-          });
-        } else {
-          window.location.hash = '#';
-          this.props.handleSignIn(result);
-        }
-      })
-      .catch(() => { })
-      .finally(() => this.requests.delete(requestController));
-  }
+    const { username, password } = formData;
 
-  render() {
-    const path = this.props.path;
-    const altHeader = path === 'sign-up'
-      ? 'Create An Account'
-      : 'Sign In';
-    if (path === 'sign-up') {
-      return (
-        <div className="shadow auth-form-container">
-          <div className="row auth-form-header">
-            <h1 className="orange text-shadow auth-form-header-text">{ altHeader }</h1>
-          </div>
-          <form onSubmit={this.handleSubmit} className="row auth-form">
-            <div className="form-element">
-              <div className="label bookmark shadow">
-                <label className="orange" htmlFor="username">Username:</label>
-              </div>
-              <div className="input auth-form-input">
-                <input required autoFocus minLength="6" maxLength="16" type="text" onChange={this.handleChange} value={this.state.username} className="lora" name="username" id="username" />
-                <i className={this.state.usernameIcon}></i>
-                {
-                  this.state.errorUser
-                    ? <span className="invalid-text lora">{this.state.errorUser}</span>
-                    : <></>
-                }
-              </div>
-            </div>
-            <div className="form-element">
-              <div className="label bookmark shadow">
-                <label className="orange" htmlFor="password">Password:</label>
-              </div>
-              <div className="input auth-form-input">
-                <input required type="password" minLength="8" maxLength="20" onChange={this.handleChange} value={this.state.password} className="lora" name="password" id="password" />
-                <i className={this.state.passwordIcon}></i>
-                {
-                  this.state.errorReq
-                    ? <span className="invalid-text lora">{this.state.errorReq}</span>
-                    : <></>
-                }
-              </div>
-            </div>
-            <div className="form-element">
-              <div className="label bookmark shadow">
-                <label className="orange" htmlFor="confirmPassword">Confirm Password:</label>
-              </div>
-              <div className="input auth-form-input">
-                <input required type="password" minLength="8" maxLength="20" onChange={this.handleChange} value={this.state.confirmPassword} className="lora" name="confirmPassword" id="confirmPassword" />
-                <i className={this.state.confirmPasswordIcon}></i>
-                {
-                  this.state.errorMatch
-                    ? <span className="invalid-text lora">{this.state.errorMatch}</span>
-                    : <></>
-                }
-              </div>
-            </div>
-            <div className="row">
-              <div className="form-requirements lora">
-                <span>Password requirements:</span>
-                <ul>
-                  <li>8 or more characters</li>
-                  <li>At least 1 capital letter</li>
-                  <li>At least one number</li>
-                  <li>At least one special character</li>
-                </ul>
-              </div>
-            </div>
-            <div className="row form-handles">
-              <a href="#sign-in" className="text-shadow auth-form-link">Sign In</a>
-              <div className="form-button">
-                <button className="shadow" type="submit">Create</button>
-              </div>
-            </div>
-          </form>
-        </div>
-      );
-    } else if (path === 'sign-in') {
-      return (
-        <div className="shadow auth-form-container">
-          <div className="row auth-form-header">
-            <h1 className="orange text-shadow auth-form-header-text">{ altHeader }</h1>
-          </div>
-          <form onSubmit={this.handleSubmit} className="row auth-form">
-            <div className="form-element">
-              <div className="label bookmark shadow">
-                <label className="orange" htmlFor="username">Username:</label>
-              </div>
-              <div className="input auth-form-input">
-                <input required autoFocus type="text" onChange={this.handleChange} value={this.state.username} className="lora" name="username" id="username" />
-              </div>
-            </div>
-            <div className="form-element">
-              <div className="label bookmark shadow">
-                <label className="orange" htmlFor="password">Password:</label>
-              </div>
-              <div className="input auth-form-input">
-                <input required type="password" onChange={this.handleChange} value={this.state.password} className="lora" name="password" id="password" />
-                {
-                  this.state.errorLogin
-                    ? <span className="invalid-text lora">{this.state.errorLogin}</span>
-                    : <></>
-                }
-              </div>
-            </div>
-            <div className="row form-handles">
-              <a href="#sign-up" className="text-shadow auth-form-link">Create an Account</a>
-              <div className="form-button">
-                <button className="shadow" type="submit">Sign In</button>
-              </div>
-            </div>
-          </form>
-        </div>
-      );
+    try {
+      const response = await fetch(`/api/auth/${path}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ username, password })
+      });
+
+      const result = await response.json();
+
+      if (result.error && path === 'sign-up') {
+        setFormData(prev => ({
+          ...prev,
+          username: '',
+          password: '',
+          confirmPassword: '',
+          usernameIcon: 'hidden',
+          passwordIcon: 'hidden',
+          confirmPasswordIcon: 'hidden',
+          errorUser: 'Username taken, try another',
+          errorReq: '',
+          errorMatch: ''
+        }));
+      } else if (result.error && path === 'sign-in') {
+        setFormData(prev => ({
+          ...prev,
+          errorLogin: 'Invalid username/password'
+        }));
+      } else {
+        handleSignIn(result);
+        navigate('/');
+      }
+    } catch (error) {
+      console.error('Error:', error);
     }
+  };
+
+  const handleChange = event => {
+    const { name, value } = event.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+
+    if (path === 'sign-up') {
+      handleCredentials();
+    }
+  };
+
+  const altHeader = path === 'sign-up' ? 'Create An Account' : 'Sign In';
+
+  if (path === 'sign-up') {
+    return (
+      <div className="shadow auth-form-container">
+        <div className="row auth-form-header">
+          <h1 className="orange text-shadow auth-form-header-text">{altHeader}</h1>
+        </div>
+        <form onSubmit={handleSubmit} className="row auth-form">
+          <div className="form-element">
+            <div className="label bookmark shadow">
+              <label className="orange" htmlFor="username">Username:</label>
+            </div>
+            <div className="input auth-form-input">
+              <input
+                required
+                autoFocus
+                minLength="6"
+                maxLength="16"
+                type="text"
+                onChange={handleChange}
+                value={formData.username}
+                className="lora"
+                name="username"
+                id="username"
+              />
+              <i className={formData.usernameIcon}></i>
+              {formData.errorUser && (
+                <span className="invalid-text lora">{formData.errorUser}</span>
+              )}
+            </div>
+          </div>
+          <div className="form-element">
+            <div className="label bookmark shadow">
+              <label className="orange" htmlFor="password">Password:</label>
+            </div>
+            <div className="input auth-form-input">
+              <input
+                required
+                type="password"
+                minLength="8"
+                maxLength="20"
+                onChange={handleChange}
+                value={formData.password}
+                className="lora"
+                name="password"
+                id="password"
+              />
+              <i className={formData.passwordIcon}></i>
+              {formData.errorReq && (
+                <span className="invalid-text lora">{formData.errorReq}</span>
+              )}
+            </div>
+          </div>
+          <div className="form-element">
+            <div className="label bookmark shadow">
+              <label className="orange" htmlFor="confirmPassword">Confirm Password:</label>
+            </div>
+            <div className="input auth-form-input">
+              <input
+                required
+                type="password"
+                minLength="8"
+                maxLength="20"
+                onChange={handleChange}
+                value={formData.confirmPassword}
+                className="lora"
+                name="confirmPassword"
+                id="confirmPassword"
+              />
+              <i className={formData.confirmPasswordIcon}></i>
+              {formData.errorMatch && (
+                <span className="invalid-text lora">{formData.errorMatch}</span>
+              )}
+            </div>
+          </div>
+          <div className="row">
+            <div className="form-requirements lora">
+              <span>Password requirements:</span>
+              <ul>
+                <li>8 or more characters</li>
+                <li>At least 1 capital letter</li>
+                <li>At least one number</li>
+                <li>At least one special character</li>
+              </ul>
+            </div>
+          </div>
+          <div className="row form-handles">
+            <Link to="/sign-in" className="text-shadow auth-form-link">
+              Sign In
+            </Link>
+            <div className="form-button">
+              <button className="shadow" type="submit">Create</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    );
+  } else if (path === 'sign-in') {
+    return (
+      <div className="shadow auth-form-container">
+        <div className="row auth-form-header">
+          <h1 className="orange text-shadow auth-form-header-text">{altHeader}</h1>
+        </div>
+        <form onSubmit={handleSubmit} className="row auth-form">
+          <div className="form-element">
+            <div className="label bookmark shadow">
+              <label className="orange" htmlFor="username">Username:</label>
+            </div>
+            <div className="input auth-form-input">
+              <input
+                required
+                autoFocus
+                type="text"
+                onChange={handleChange}
+                value={formData.username}
+                className="lora"
+                name="username"
+                id="username"
+              />
+            </div>
+          </div>
+          <div className="form-element">
+            <div className="label bookmark shadow">
+              <label className="orange" htmlFor="password">Password:</label>
+            </div>
+            <div className="input auth-form-input">
+              <input
+                required
+                type="password"
+                onChange={handleChange}
+                value={formData.password}
+                className="lora"
+                name="password"
+                id="password"
+              />
+              {formData.errorLogin && (
+                <span className="invalid-text lora">{formData.errorLogin}</span>
+              )}
+            </div>
+          </div>
+          <div className="row form-handles">
+            <Link to="/sign-up" className="text-shadow auth-form-link">
+              Create an Account
+            </Link>
+            <div className="form-button">
+              <button className="shadow" type="submit">Sign In</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    );
   }
 }
