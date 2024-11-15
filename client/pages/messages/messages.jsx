@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, Navigate } from 'react-router-dom';
-import AppContext from '../lib/app-context';
-import GroupMessages from '../lib/group-messages';
-import formatDate from '../lib/format-date';
+import AppContext from '../../lib/app-context';
+import GroupMessages from '../../lib/group-messages';
+import formatDate from '../../lib/format-date';
 
 export default function Messages() {
   const { user } = useContext(AppContext);

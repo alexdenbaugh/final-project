@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import AppContext from '../lib/app-context';
+import AppContext from '../../lib/app-context';
 
 export default function NavBarModal() {
   const { user, modal, handleHeader, handleSignOut } = useContext(AppContext);

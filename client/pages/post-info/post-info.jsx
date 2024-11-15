@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
-import AppContext from '../lib/app-context';
+import AppContext from '../../lib/app-context';
 
 export default function PostInfo() {
   const { user, handleMessage } = useContext(AppContext);

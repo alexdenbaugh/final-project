@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import checkPassword from '../lib/password-check';
+import checkPassword from '../../lib/password-check';
 
 export default function AuthForm({ path, handleSignIn }) {
   const navigate = useNavigate();

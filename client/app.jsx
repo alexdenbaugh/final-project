@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import Header from './components/header';
-import PageContainer from './components/page-container';
-import NewPostForm from './pages/new-post';
+import Header from './components/header/header';
+import PageContainer from './components/page-container/page-container';
+import NewPostForm from './pages/new-post/new-post';
 import AppContext from './lib/app-context';
-import Posts from './pages/posts';
-import PostInfo from './pages/post-info';
-import NavBarModal from './components/nav-bar-modal';
-import Auth from './pages/auth';
-import Home from './pages/home';
-import Messages from './pages/messages';
-import Conversation from './pages/conversation';
+import Posts from './pages/posts/posts';
+import PostInfo from './pages/post-info/post-info';
+import NavBarModal from './components/nav-bar-modal/nav-bar-modal';
+import Auth from './pages/auth/auth';
+import Home from './pages/home/home';
+import Messages from './pages/messages/messages';
+import Conversation from './pages/conversation/conversation';
 import decodeToken from './lib/decode-token';
 
 export default function App() {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link, Navigate } from 'react-router-dom';
-import AppContext from '../lib/app-context';
-import debounce from '../lib/debounce';
+import AppContext from '../../lib/app-context';
+import debounce from '../../lib/debounce';
 
 export default function Posts() {
   const { user } = useContext(AppContext);

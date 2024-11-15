@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Navigate } from 'react-router-dom';
-import AppContext from '../lib/app-context';
+import AppContext from '../../lib/app-context';
 
 export default function Home() {
   const { user } = useContext(AppContext);

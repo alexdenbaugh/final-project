@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
-import AppContext from '../lib/app-context';
-import AuthForm from '../components/auth-form';
+import AppContext from '../../lib/app-context';
+import AuthForm from '../../components/auth-form/auth-form';
 
 export default function Auth() {
   const { user, handleSignIn } = useContext(AppContext);

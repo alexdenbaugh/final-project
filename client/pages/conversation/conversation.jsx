@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import { Navigate, useParams } from 'react-router-dom';
-import AppContext from '../lib/app-context';
-import formatDate from '../lib/format-date';
+import AppContext from '../../lib/app-context';
+import formatDate from '../../lib/format-date';
 
 export default function Conversation() {
   const { user } = useContext(AppContext);
